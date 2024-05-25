@@ -1,0 +1,135 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>me.phoenix</groupId>
+    <artifactId>SlimeLib</artifactId>
+
+    <!-- Default version is UNOFFICIAL to prevent breaking auto update -->
+    <version>UNOFFICIAL</version>
+    <inceptionYear>2024</inceptionYear>
+    <packaging>jar</packaging>
+
+    <description>A Minecraft Development Library for SlimeCraftSMP plugins.</description>
+    <url>https://github.com/SlimeCraftSMP/SlimeLib</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Java 17 (LTS) -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <!-- Paper properties -->
+        <paper.version>1.20.6</paper.version>
+
+        <!-- Settings for sonarcloud.io -->
+        <sonar.projectKey>SlimeCraftSMP_SlimeLib</sonar.projectKey>
+        <sonar.organization>slimecraftsmp</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/SlimeCraftSMP/SlimeLib/issues</url>
+    </issueManagement>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
+            <id>papermc-repo</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+        <defaultGoal>clean package</defaultGoal>
+        <finalName>${project.name} v${project.version}</finalName>
+
+        <plugins>
+            <plugin>
+                <!-- Javadocs -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+
+                <configuration>
+                    <doctitle>SlimeLib - Javadocs</doctitle>
+                    <windowtitle>SlimeLib - Javadocs</windowtitle>
+                    <detectOfflineLinks>false</detectOfflineLinks>
+                    <additionalJOption>-html5</additionalJOption>
+
+                    <!-- Group packages together in Javadocs -->
+                    <groups>
+                        <group>
+                            <title>SlimeLib - Configuration Management</title>
+                            <packages>me.phoenix.slimelib.config*</packages>
+                        </group>
+                        <group>
+                            <title>SlimeLib - Inventory Management</title>
+                            <packages>me.phoenix.slimelib.inventory*</packages>
+                        </group>
+                        <group>
+                            <title>SlimeLib - Item Management</title>
+                            <packages>me.phoenix.slimelib.item*</packages>
+                        </group>
+                        <group>
+                            <title>SlimeLib - Metrics Service</title>
+                            <packages>me.phoenix.slimelib.metrics*</packages>
+                        </group>
+                        <group>
+                            <title>SlimeLib - Miscellaneous Utilities</title>
+                            <packages>me.phoenix.slimelib.other*</packages>
+                        </group>
+                        <group>
+                            <title>SlimeLib - Slimefun Utilities</title>
+                            <packages>me.phoenix.slimelib.slimefun*</packages>
+                        </group>
+                        <group>
+                            <title>SlimeLib - Visual Management</title>
+                            <packages>me.phoenix.slimelib.visual*</packages>
+                        </group>
+                        <group>
+                            <title>SlimeLib - World Management</title>
+                            <packages>me.phoenix.slimelib.world*</packages>
+                        </group>
+                    </groups>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <!-- Add all language and config files here -->
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+
+                <includes>
+                    <include>*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>${paper.version}-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.SlimeCraftSMP</groupId>
+            <artifactId>Slimefun4</artifactId>
+            <version>e1df3d3e2e</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

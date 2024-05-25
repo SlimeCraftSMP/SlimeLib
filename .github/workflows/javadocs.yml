@@ -1,0 +1,46 @@
+name: Javadocs
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - 'src/**'
+    - 'pom.xml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Maven build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4.2.1
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+        java-package: jdk
+        architecture: x64
+
+    - name: Cache Maven packages
+      uses: actions/cache@v4.0.2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Build Javadocs
+      run: mvn javadoc:javadoc
+
+    - name: Deploy Javadocs
+      uses: peaceiris/actions-gh-pages@v4.0.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: target/site/apidocs/.
+        publish_branch: main-javadocs

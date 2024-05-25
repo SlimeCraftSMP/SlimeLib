@@ -1,0 +1,58 @@
+name: Pull Request
+about: Create a pull request to help us improve SlimeLib.
+labels: ['🧪 Needs Testing']
+
+body:
+- type: markdown
+  attributes:
+    value: |
+      ## 👋 Welcome Contributors
+      We're excited to have you here! Your pull requests are vital for improving SlimeLib. Thank you for contributing!
+
+- id: checklist
+  type: checkboxes
+  attributes:
+    label: '❗ Checklist'
+    description: Please review this checklist prior to contributing.
+    options:
+    - label: I have thoroughly tested the suggested modifications and assure they won't cause chaos.
+      required: true
+    - label: I have tested the changes alongside popular addons and confirmed they remain intact.
+      required: true
+    - label: I ensured the changes maintain compatibility across supported Minecraft versions.
+      required: true
+    - label: I adhered to existing code standards and maintained formatting.
+      required: true
+    - label: Documentation has been included for any new public classes or methods.
+      required: true
+    - label: I have added annotations to clarify method behavior.
+      required: true
+
+- id: description
+  type: textarea
+  validations:
+    required: true
+  attributes:
+    label: '📍 Description'
+    description: |
+      Could you clarify the reason behind your pull request and detail the modifications you've made to the code?
+    placeholder: |
+      I'm making this pull request to address [...]. The changes I've made include [...].
+
+- id: issues
+  type: textarea
+  validations:
+    required: false
+  attributes:
+    label: '🐛 Related Issues'
+    description: |
+      Please tag any Issues related to your Pull Request. Please ignore this field if it's not applicable.
+    placeholder: |
+      Syntax: "Resolves #000"
+
+- type: markdown
+  attributes:
+    value: |
+      ## ❤️ Thank you for submitting your pull request!
+      Your contribution is invaluable and help us improve SlimeLib!
+      Feel free to also join our [Discord server](https://discord.gg/xFtghGVCVD) to connect with contributors and enthusiasts, and explore more collaboration opportunities.

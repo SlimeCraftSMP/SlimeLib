@@ -1,0 +1,115 @@
+name: Bug Report
+description: Report a bug to help us improve SlimeLib.
+labels: ['🧪 Needs Testing', '🐞 Bug Report']
+
+body:
+- type: markdown
+  attributes:
+    value: |
+      ## 👋 Welcome to the Bug Tracker
+      If you require assistance in pinpointing the issue, feel free to hop onto our [Discord server](https://discord.gg/xFtghGVCVD) and check if others are encountering a similar problem.
+
+- id: checklist
+  type: checkboxes
+  attributes:
+    label: '❗ Checklist'
+    description: Please review this checklist prior to reporting the issue.
+    options:
+    - label: I am using the official version of SlimeLib.
+      required: true
+    - label: I am using the latest version of SlimeLib.
+      required: true
+    - label: I looked for similar open issues and didn't find any existing bug reports on this.
+      required: true
+
+- id: description
+  type: textarea
+  validations:
+    required: true
+  attributes:
+    label: '📍 Description'
+    description: |
+      A clear and detailed description of the issue encountered.
+      The more details you can provide, the easier we can handle this problem.
+      Please try to provide as much info as possible. Simply stating "It doesn't work" is insufficient.
+    placeholder: |
+      When doing [...] I experienced [...], I am pretty sure this is unintended and should be fixed.
+
+- id: reproduction-steps
+  type: textarea
+  validations:
+    required: true
+  attributes:
+    label: '📑 Reproduction Steps'
+    description: |
+      Please provide the exact steps to replicate this issue, the more detailed the easier we can recreate it.
+      We recommend using YouTube videos or screenshots to illustrate the problem.
+      If you're able to capture any footage of the bug occurring, it would greatly assist us in resolving the issue.
+    placeholder: |
+      1. Do [...]
+      2. Next [...]
+      3. As a result, [...] happens
+
+- id: expected-behaviour
+  type: textarea
+  validations:
+    required: true
+  attributes:
+    label: '💡 Expected Behavior'
+    description: |
+      What did you expect to happen?
+      What do you believe should have been the correct behaviour?
+    placeholder: |
+      I expected [...] to happen.
+
+- id: server-log
+  type: input
+  attributes:
+    label: '📜 Server Log'
+    description: |
+      Please upload your entire log (located under /logs/latest.log) to https://pastebin.com/.
+      We may discard your issue if you simply post it here, as it's unreadable for us. Kindly use Pastebin!
+    placeholder: https://pastebin.com/...
+
+- id: server-software
+  type: dropdown
+  validations:
+    required: true
+  attributes:
+    label: '💻 Server Software'
+    description: 'Please select the software your Server is running on'
+    options:
+      - Paper
+      - Purpur
+      - Other (Please specify in your description)
+
+- id: minecraft-version
+  type: dropdown
+  validations:
+    required: true
+  attributes:
+    label: '🎮 Minecraft Version'
+    description: 'Please select the Minecraft version of the server'
+    options:
+      - 1.20.x
+      - (Older versions are unsupported)
+
+- id: slimelib-version
+  type: textarea
+  validations:
+    required: true
+  attributes:
+    label: '⭐ SlimeLib version'
+    description: |
+      We reserve the right to close your issue if you fail to provide exact version numbers. **"latest" is not a version number.**
+      You can also execute "/sf versions" and upload a complete screenshot of the entire output.
+    placeholder: SlimeLib version [...]
+
+- type: markdown
+  attributes:
+    value: |
+      ## ❤️ Thank you for submitting your bug report!
+      If you discover any additional information that can help to identify this problem, please don't hesitate to comment on your issue!
+      Any additional info can help us fix this bug faster.
+      In the meantime, consider visiting our [Discord server](https://discord.gg/xFtghGVCVD).
+      Perhaps others have encountered a similar issue.

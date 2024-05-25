@@ -1,0 +1,37 @@
+name: Close invalid Issue
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  comment:
+
+    name: Invalid Issues
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.issue.labels.*.name, '🐞 Bug Report') == false
+    steps:
+    - name: Close Issue
+      uses: maxkomarychev/octions/octions/issues/update@master
+      with:
+         token: ${{ secrets.GITHUB_TOKEN }}
+         issue_number: ${{ github.event.issue.number }}
+         state: closed
+    - name: Add invalid label
+      uses: maxkomarychev/octions/octions/issues/add-labels@master
+      with:
+         token: ${{ secrets.GITHUB_TOKEN }}
+         issue_number: ${{ github.event.issue.number }}
+         labels: 'invalid'
+    - name: Create a comment
+      uses: maxkomarychev/octions/octions/issues/create-comment@master
+      with:
+         token: ${{ secrets.GITHUB_TOKEN }}
+         issue_number: ${{ github.event.issue.number }}
+         body: |-
+           Your issue seems to be missing our template.
+           [Click here to create a bug report](https://github.com/SlimeCraftSMP/SlimeLib/issues/new/choose)
+
+           Please bear in mind that our Bug Tracker is strictly designated for bug reports. For other types
+           of discussion, such as suggestions or questions, kindly post them on our [Discord Server](https://discord.com/invite/xFtghGVCVD).

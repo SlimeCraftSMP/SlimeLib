@@ -1,0 +1,23 @@
+extends: default
+locale: en_US.UTF-8
+
+yaml-files:
+- '*.yml'
+
+rules:
+
+  new-lines: disable
+
+  line-length: disable
+
+  truthy:
+    allowed-values: ['true', 'false']
+    check-keys: false
+
+  indentation: disable
+
+  document-start: disable
+
+  trailing-spaces:
+    ignore: |
+      /src/main/resources/languages/**/*.yml
