@@ -8,6 +8,10 @@ import org.bukkit.inventory.ItemStack;
  */
 public class RecipeUtils{
 
+	private RecipeUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Build 3 x 3 recipe using a Material.
 	 *

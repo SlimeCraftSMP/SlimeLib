@@ -17,6 +17,10 @@ import java.util.List;
  */
 public final class ParticleUtils {
 
+	private ParticleUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Display particle randomly.
 	 *

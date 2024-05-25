@@ -10,6 +10,10 @@ import java.text.DecimalFormat;
  */
 public class MachineLore{
 
+	private MachineLore() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
 	private static final String PREFIX = "<dark_gray>⇨</dark_gray><yellow> ⚡ </yellow><gray>";
 	private static final String SUFFIX = "</gray>";

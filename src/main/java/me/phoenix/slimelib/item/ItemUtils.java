@@ -10,6 +10,10 @@ import org.bukkit.potion.PotionType;
  */
 public class ItemUtils {
 
+	private ItemUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Create a potion item stack.
 	 *

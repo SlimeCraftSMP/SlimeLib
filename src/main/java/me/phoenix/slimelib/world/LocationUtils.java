@@ -9,6 +9,10 @@ import javax.annotation.Nonnull;
  */
 public final class LocationUtils {
 
+	private LocationUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Creates a random location from a given centre and range.
 	 *

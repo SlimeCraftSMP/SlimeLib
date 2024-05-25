@@ -1,8 +1,6 @@
 package me.phoenix.slimelib.inventory;
 
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,6 +8,10 @@ import org.bukkit.inventory.ItemStack;
  * Utilities for handling inventories.
  */
 public class InventoryUtils{
+
+	private InventoryUtils() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	/**
 	 * Find a particular Slimefun item in the inventory.

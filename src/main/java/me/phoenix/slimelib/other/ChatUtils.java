@@ -9,6 +9,10 @@ import org.bukkit.entity.Player;
  */
 public class ChatUtils {
 
+	private ChatUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Send a message to a player.
 	 *

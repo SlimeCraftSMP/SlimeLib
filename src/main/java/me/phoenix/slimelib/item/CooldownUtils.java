@@ -10,7 +10,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 /**
  * Utilities to create items that have a cooldown.
  */
-public final class CooldownUtils {
+public class CooldownUtils {
+
+	private CooldownUtils() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	/**
 	 * The cooldown NamespacedKey.

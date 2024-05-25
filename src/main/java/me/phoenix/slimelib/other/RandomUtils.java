@@ -8,6 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class RandomUtils {
 
+	private RandomUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * The constant random.
 	 */

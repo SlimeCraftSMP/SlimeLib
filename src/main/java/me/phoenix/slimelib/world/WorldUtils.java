@@ -8,6 +8,10 @@ import org.bukkit.entity.Entity;
  */
 public class WorldUtils {
 
+	private WorldUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Checks if the entity is in the overworld.
 	 *

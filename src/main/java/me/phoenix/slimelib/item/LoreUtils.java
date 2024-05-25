@@ -12,6 +12,10 @@ import java.util.List;
  */
 public class LoreUtils{
 
+	private LoreUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Apply new lore into the ItemStack after editing the ItemMeta.
 	 *

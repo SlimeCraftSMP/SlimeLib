@@ -7,6 +7,10 @@ import org.bukkit.NamespacedKey;
  */
 public class KeyUtils{
 
+	private KeyUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Create a namespaced key.
 	 *

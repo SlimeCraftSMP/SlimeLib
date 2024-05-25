@@ -11,6 +11,10 @@ import java.util.function.Consumer;
  */
 public class SchedulerUtils{
 
+	private SchedulerUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * Run a task later (sync).
 	 *

@@ -5,6 +5,10 @@ package me.phoenix.slimelib.other;
  */
 public class TypeUtils {
 
+    private TypeUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Converts a String to a byte.
      *
