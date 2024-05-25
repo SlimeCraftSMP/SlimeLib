@@ -65,7 +65,7 @@
                     <detectOfflineLinks>false</detectOfflineLinks>
                     <additionalJOption>-html5</additionalJOption>
 
-                    <!-- Group packages together in Javadocs -->
+                    <!-- Group packages together in the Javadocs -->
                     <groups>
                         <group>
                             <title>SlimeLib - Configuration Management</title>

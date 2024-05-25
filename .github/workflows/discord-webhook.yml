@@ -22,7 +22,7 @@ jobs:
         id: description
         run: |
           id=$(echo "${{ github.event.head_commit.message }}" | sed 's/Signed-off-by.*//')
-          id=$(echo "${id}" | sed ':a;N;$!ba;s/\\n/\n/g')
+          id=$(echo "${id}" | sed 's/\\n/\n/g')
           echo "id=$id" >> $GITHUB_OUTPUT
 
       - name: Announce Changes
