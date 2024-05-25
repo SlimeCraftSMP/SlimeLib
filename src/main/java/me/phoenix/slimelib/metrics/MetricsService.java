@@ -4,7 +4,6 @@ import me.phoenix.slimelib.metrics.chart.CustomChart;
 import me.phoenix.slimelib.metrics.object.JsonObjectBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.JavaPlugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;

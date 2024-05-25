@@ -1,6 +1,7 @@
 package me.phoenix.slimelib;
 
 import me.phoenix.slimelib.config.Config;
+import me.phoenix.slimelib.inventory.MenuListener;
 import me.phoenix.slimelib.metrics.MetricsService;
 import me.phoenix.slimelib.metrics.chart.pie.SimplePie;
 import org.bukkit.Bukkit;
@@ -45,6 +46,7 @@ public final class SlimeLib extends JavaPlugin {
     public void onEnable() {
         sendStartupMessage();
         setupMetrics();
+        setupEvents();
     }
 
     @Override
@@ -70,6 +72,10 @@ public final class SlimeLib extends JavaPlugin {
                         () -> config.booleanValue("options.auto-update") ? "Enabled" : "Disabled"
                 )
         );
+    }
+
+    private void setupEvents(){
+        new MenuListener(this);
     }
 
     private void cancelAllTasks(){
