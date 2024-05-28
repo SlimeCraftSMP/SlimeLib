@@ -22,7 +22,12 @@
         <maven.compiler.target>21</maven.compiler.target>
 
         <!-- Paper properties -->
-        <paper.version>1.20.6</paper.version>
+        <paper.version>1.20.4</paper.version>
+        <paper.javadocs>https://jd.papermc.io/paper/1.20/</paper.javadocs>
+
+        <!-- Slimefun properties -->
+        <slimefun.version>1a4011c2bd</slimefun.version>
+        <slimefun.javadocs>https://slimefun.github.io/javadocs/Slimefun4/docs/</slimefun.javadocs>
 
         <!-- Settings for sonarcloud.io -->
         <sonar.projectKey>SlimeCraftSMP_SlimeLib</sonar.projectKey>
@@ -64,6 +69,12 @@
                     <windowtitle>SlimeLib - Javadocs</windowtitle>
                     <detectOfflineLinks>false</detectOfflineLinks>
                     <additionalJOption>-html5</additionalJOption>
+
+                    <links>
+                        <!-- We can reference other APIs in our Javadocs -->
+                        <link>${paper.javadocs}</link>
+                        <link>${slimefun.javadocs}</link>
+                    </links>
 
                     <!-- Group packages together in the Javadocs -->
                     <groups>
@@ -128,7 +139,7 @@
         <dependency>
             <groupId>com.github.SlimeCraftSMP</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>e1df3d3e2e</version>
+            <version>${slimefun.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

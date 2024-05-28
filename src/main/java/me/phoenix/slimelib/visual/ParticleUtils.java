@@ -109,7 +109,7 @@ public final class ParticleUtils {
 	@ParametersAreNonnullByDefault
     public static void displayParticleRandomly(Location location, int rangeRadius, int numberOfParticles, Particle.DustOptions dustOptions) {
         for (int i = 0; i < numberOfParticles; i++) {
-            location.getWorld().spawnParticle(Particle.DUST, LocationUtils.randomLocation(location, rangeRadius), 1, dustOptions);
+            location.getWorld().spawnParticle(Particle.REDSTONE, LocationUtils.randomLocation(location, rangeRadius), 1, dustOptions);
         }
     }
 
@@ -136,7 +136,7 @@ public final class ParticleUtils {
 	 */
 	@ParametersAreNonnullByDefault
     public static void drawLine(Particle.DustOptions dustOptions, Location start, Location end, double space) {
-        drawLine(Particle.DUST, start, end, space, dustOptions);
+        drawLine(Particle.REDSTONE, start, end, space, dustOptions);
     }
 
 	/**
@@ -235,7 +235,7 @@ public final class ParticleUtils {
 	 */
 	@ParametersAreNonnullByDefault
     public static void drawCube(Particle.DustOptions dustOptions, Location corner1, Location corner2, double space) {
-        drawCube(Particle.DUST, corner1, corner2, space, dustOptions);
+        drawCube(Particle.REDSTONE, corner1, corner2, space, dustOptions);
     }
 
 	/**

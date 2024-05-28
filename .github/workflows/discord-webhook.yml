@@ -22,8 +22,9 @@ jobs:
         id: description
         run: |
           id=$(echo "${{ github.event.head_commit.message }}" | sed 's/Signed-off-by.*//')
-          id=$(echo "${id}" | sed 's/\\n/\n/g')
-          echo "id=$id" >> $GITHUB_OUTPUT
+          echo "id<<EOF" >> $GITHUB_OUTPUT
+          echo "$id" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Announce Changes
         uses: tsickert/discord-webhook@v6.0.0
