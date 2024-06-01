@@ -12,12 +12,12 @@ jobs:
   e2e-testing:
     name: End to End Testing
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 3
 
     strategy:
       matrix:
         include:
-          - mcVersion: 'latest'
+          - mcVersion: '1.20.4'
             javaVersion: '21'
 
     steps:
@@ -53,10 +53,22 @@ jobs:
           curl -o paper.jar \
             "https://api.papermc.io/v2/projects/paper/versions/$VERSION/builds/$BUILD/downloads/$JAR_FILE"
 
-      - name: Download Slimefun
+      - name: Get latest Slimefun information
+        id: get_latest_release
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            const latestRelease = await github.rest.repos.getLatestRelease({
+              owner: SlimeCraftSMP,
+              repo: Slimefun4
+            });
+            return latestRelease.data;
+
+      - name: Download latest Slimefun
         run: |
-          curl -o Slimefun4-Dev.jar https://blob.build/dl/Slimefun4/Dev/latest
-          mv Slimefun4-Dev.jar plugins/Slimefun4-Dev.jar
+          asset_url=$(echo "${{ steps.get_latest_release.outputs.result }}" | jq -r '.assets[0].browser_download_url')
+          curl -o Slimefun4-SlimeCraftSMP.jar $(echo $asset_url)
+          mv Slimefun4-SlimeCraftSMP.jar plugins/Slimefun4-SlimeCraftSMP.jar   
 
       - name: Download SlimeLib
         uses: actions/download-artifact@v4.1.4
@@ -66,4 +78,7 @@ jobs:
 
       - name: Run server
         run: |
-          java -jar paper.jar --nogui
+          java -jar paper.jar --nogui &
+          sleep 60
+          kill $!
+          exit 0

@@ -2,9 +2,10 @@ name: Discord Webhook
 
 on:
   push:
+    branches:
+    - main
     paths:
     - 'src/**'
-    - '!src/main/resources/languages/**'
     - 'pom.xml'
 
 permissions:

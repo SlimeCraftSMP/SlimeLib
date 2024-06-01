@@ -8,11 +8,11 @@ on:
     - 'src/**'
     - 'pom.xml'
   pull_request:
+    branches:
+    - main
     paths:
-    - '.github/workflows/**'
     - 'src/**'
     - 'pom.xml'
-    - 'CHANGELOG.md'
 
 permissions:
   contents: read
@@ -56,8 +56,17 @@ jobs:
         name: slimelib-${{ github.run_number }}
         path: 'target/SlimeLib v${{ github.run_number }}.jar'
 
-  call-workflow:
+  test-build:
     needs: [build]
     uses: ./.github/workflows/e2e-testing.yml
     with:
       artifact-name: slimelib-${{ github.run_number }}
+
+  release-build:
+    if: startsWith(github.event.head_commit.message, '[Release]') == true
+    needs: [test-build]
+    uses: ./.github/workflows/release.yml
+    with:
+      artifact-name: slimelib-${{ github.run_number }}
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}

@@ -23,7 +23,7 @@
 
         <!-- Paper properties -->
         <paper.version>1.20.4</paper.version>
-        <paper.javadocs>https://jd.papermc.io/paper/1.20/</paper.javadocs>
+        <paper.javadocs>https://jd.papermc.io/paper/1.20.4/</paper.javadocs>
 
         <!-- Slimefun properties -->
         <slimefun.version>1a4011c2bd</slimefun.version>
