@@ -13,6 +13,8 @@ permissions:
 
 jobs:
   build:
+    if: startsWith(github.event.head_commit.message, '[Release]') == true
+
     name: Maven build
     runs-on: ubuntu-latest
 
