@@ -29,6 +29,8 @@ jobs:
       uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: ${{ secrets.ACCESS_TOKEN }}
+        draft: false
+        prerelease: false
         automatic_release_tag: v${{ github.run_number }}
         title: Release ${{ github.run_number }}
         files: |
