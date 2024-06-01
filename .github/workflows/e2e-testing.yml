@@ -56,7 +56,7 @@ jobs:
       - name: Download Slimefun
         run: |
           RELEASE=$(curl -s https://api.github.com/repos/SlimeCraftSMP/Slimefun4/releases/latest | jq -r '.assets[0].browser_download_url')
-          curl -o Slimefun4-SlimeCraftSMP.jar $RELEASE
+          curl -o Slimefun4-SlimeCraftSMP.jar "$RELEASE"
           mv Slimefun4-SlimeCraftSMP.jar plugins/Slimefun4-SlimeCraftSMP.jar
 
       - name: Download SlimeLib
