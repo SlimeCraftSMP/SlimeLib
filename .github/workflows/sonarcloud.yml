@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   scan:
+    if: startsWith(github.event.head_commit.message, '[Skip]') == false
 
     name: SonarCloud Scanner
     runs-on: ubuntu-latest
