@@ -1,5 +1,8 @@
 package me.phoenix.slimelib;
 
+import me.phoenix.slimelib.command.CommandLogic;
+import me.phoenix.slimelib.command.object.CommandInfo;
+import me.phoenix.slimelib.registry.CommandRegistry;
 import me.phoenix.slimelib.config.Config;
 import me.phoenix.slimelib.inventory.MenuListener;
 import me.phoenix.slimelib.metrics.MetricsService;
@@ -23,6 +26,9 @@ public final class SlimeLib extends JavaPlugin {
     // Service
     private final MetricsService metrics = new MetricsService(this, 21985);
 
+    // Registry
+    private final CommandRegistry commandRegistry = new CommandRegistry();
+
     /**
      * Instance of SlimeLib.
      */
@@ -36,6 +42,20 @@ public final class SlimeLib extends JavaPlugin {
     public static SlimeLib instance(){ return instance;}
 
     /**
+     * Instance of SlimeLib's Config.
+     *
+     * @return the SlimeLib Config
+     */
+    public static Config config(){ return instance.config;}
+
+    /**
+     * Instance of CommandRegistry.
+     *
+     * @return the CommandRegistry instance
+     */
+    public static CommandRegistry commandRegistry(){ return instance.commandRegistry;}
+
+    /**
      * SlimeLib's logger.
      *
      * @return the Logger
@@ -47,6 +67,7 @@ public final class SlimeLib extends JavaPlugin {
         sendStartupMessage();
         setupMetrics();
         setupEvents();
+        setupCommands();
     }
 
     @Override
@@ -76,6 +97,12 @@ public final class SlimeLib extends JavaPlugin {
 
     private void setupEvents(){
         new MenuListener(this);
+    }
+
+    private void setupCommands(){
+        for(CommandInfo commandInfo : SlimeLib.commandRegistry().getCommands()){
+            getCommand(commandInfo.command()[0]).setExecutor(new CommandLogic());
+        }
     }
 
     private void cancelAllTasks(){

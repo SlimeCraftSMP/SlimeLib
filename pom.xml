@@ -79,6 +79,10 @@
                     <!-- Group packages together in the Javadocs -->
                     <groups>
                         <group>
+                            <title>SlimeLib - Command Management</title>
+                            <packages>me.phoenix.slimelib.command*</packages>
+                        </group>
+                        <group>
                             <title>SlimeLib - Configuration Management</title>
                             <packages>me.phoenix.slimelib.config*</packages>
                         </group>
@@ -97,6 +101,10 @@
                         <group>
                             <title>SlimeLib - Miscellaneous Utilities</title>
                             <packages>me.phoenix.slimelib.other*</packages>
+                        </group>
+                        <group>
+                            <title>SlimeLib - Registry</title>
+                            <packages>me.phoenix.slimelib.registry*</packages>
                         </group>
                         <group>
                             <title>SlimeLib - Slimefun Utilities</title>
