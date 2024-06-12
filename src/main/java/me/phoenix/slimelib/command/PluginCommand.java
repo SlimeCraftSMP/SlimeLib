@@ -20,25 +20,23 @@ public class PluginCommand {
 	 * @param plugin the plugin
 	 */
 	public PluginCommand(Class<?> clazz, JavaPlugin plugin){
-		register(clazz, plugin);
+		registerClass(clazz, plugin);
 	}
 
-	private void register(Class<?> clazz, JavaPlugin plugin){
+	private void registerClass(Class<?> clazz, JavaPlugin plugin){
 		for(Method method : clazz.getDeclaredMethods()){
 			if(!method.isAnnotationPresent(CommandAction.class)){
 				continue;
 			}
-			final CommandAction commandAction = method.getAnnotation(CommandAction.class);
-			if(commandAction.command().contains(" ")){
-				SlimeLib.commandRegistry().addCommand(new CommandInfo(
-						commandAction.command().split(" "), commandAction.permission(), commandAction.syntax(), method, plugin
-				));
-			} else{
-				SlimeLib.commandRegistry().addCommand(new CommandInfo(
-						new String[]{commandAction.command()}, commandAction.permission(), commandAction.syntax(), method, plugin
-				));
-			}
+			registerCommand(method, plugin, method.getAnnotation(CommandAction.class));
 		}
+	}
+
+	private void registerCommand(Method method, JavaPlugin plugin, CommandAction action){
+		SlimeLib.commandRegistry().command(new CommandInfo(
+				action.command(), action.argument(), action.permission(), action.syntax(), method, plugin
+		));
+		plugin.getCommand(action.command()).setExecutor(new CommandLogic());
 	}
 
 	/**
@@ -47,7 +45,7 @@ public class PluginCommand {
 	 * @param sender the sender
 	 * @param args the args
 	 */
-	public void testCommand(CommandSender sender, String[] args){
+	public static void testCommand(CommandSender sender, String[] args){
 		// Your code goes here
 	}
 }

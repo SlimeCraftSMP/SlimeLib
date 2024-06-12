@@ -1,7 +1,5 @@
 package me.phoenix.slimelib;
 
-import me.phoenix.slimelib.command.CommandLogic;
-import me.phoenix.slimelib.command.object.CommandInfo;
 import me.phoenix.slimelib.registry.CommandRegistry;
 import me.phoenix.slimelib.config.Config;
 import me.phoenix.slimelib.inventory.MenuListener;
@@ -67,7 +65,6 @@ public final class SlimeLib extends JavaPlugin {
         sendStartupMessage();
         setupMetrics();
         setupEvents();
-        setupCommands();
     }
 
     @Override
@@ -97,12 +94,6 @@ public final class SlimeLib extends JavaPlugin {
 
     private void setupEvents(){
         new MenuListener(this);
-    }
-
-    private void setupCommands(){
-        for(CommandInfo commandInfo : SlimeLib.commandRegistry().getCommands()){
-            getCommand(commandInfo.command()[0]).setExecutor(new CommandLogic());
-        }
     }
 
     private void cancelAllTasks(){

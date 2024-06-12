@@ -124,6 +124,7 @@ public class Config{
      */
     public void reload(){
         this.config = YamlConfiguration.loadConfiguration(this.file);
+        save();
     }
 
     /**

@@ -17,7 +17,7 @@ public class CommandRegistry{
 	 *
 	 * @return the command set
 	 */
-	public Set<CommandInfo> getCommands(){
+	public Set<CommandInfo> commands(){
 		return commands;
 	}
 
@@ -26,7 +26,7 @@ public class CommandRegistry{
 	 *
 	 * @param command the command
 	 */
-	public void addCommand(CommandInfo command){
+	public void command(CommandInfo command){
 		commands.add(command);
 	}
 }
