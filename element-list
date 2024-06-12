@@ -1,4 +1,7 @@
 me.phoenix.slimelib
+me.phoenix.slimelib.command
+me.phoenix.slimelib.command.annotation
+me.phoenix.slimelib.command.object
 me.phoenix.slimelib.config
 me.phoenix.slimelib.inventory
 me.phoenix.slimelib.inventory.handler
@@ -10,6 +13,7 @@ me.phoenix.slimelib.metrics.chart.line
 me.phoenix.slimelib.metrics.chart.pie
 me.phoenix.slimelib.metrics.object
 me.phoenix.slimelib.other
+me.phoenix.slimelib.registry
 me.phoenix.slimelib.slimefun
 me.phoenix.slimelib.slimefun.block
 me.phoenix.slimelib.slimefun.block.container
