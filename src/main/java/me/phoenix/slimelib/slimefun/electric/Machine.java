@@ -36,23 +36,23 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
 	/**
 	 * The recipes that the generator can accept.
 	 */
-	public final List<MachineRecipe> RECIPES = new ArrayList<>();
+	public final List<MachineRecipe> MACHINE_RECIPES = new ArrayList<>();
 	/**
 	 * The mmachine processor.
 	 */
-	public final MachineProcessor<CraftingOperation> PROCESSOR = new MachineProcessor<>(this);
+	public final MachineProcessor<CraftingOperation> MACHINE_PROCESSOR = new MachineProcessor<>(this);
 	/**
 	 * The energy capacity of the machine.
 	 */
-	public int capacity;
+	private int capacity;
 	/**
 	 * The energy consumption of the machine.
 	 */
-	public int consumption;
+	private int consumption;
 	/**
 	 * The speed of the machine.
 	 */
-	public int speed;
+	private int speed;
 
 	/**
 	 * Instantiates a new Machine.
@@ -72,7 +72,7 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
         this.consumption = consumption;
         this.speed = speed;
 
-        PROCESSOR.setProgressBar(statusItem());
+        MACHINE_PROCESSOR.setProgressBar(statusItem());
 
         registerRecipes();
     }
@@ -80,7 +80,9 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
 	/**
 	 * Register recipes.
 	 */
-	public void registerRecipes() {}
+	public void registerRecipes() {
+		// Use this to register recipes
+	}
 
     @Override
     public void onBreak(@NotNull Block block) {
@@ -92,13 +94,13 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
             inv.dropItems(location, outputSlots());
         }
 
-        PROCESSOR.endOperation(block);
+        MACHINE_PROCESSOR.endOperation(block);
         BlockStorage.clearBlockInfo(block);
     }
 
     @Override
     public void onTick(@NotNull Block block) {
-        final CraftingOperation operation = PROCESSOR.getOperation(block);
+        final CraftingOperation operation = MACHINE_PROCESSOR.getOperation(block);
         if(operation == null){
             nullOperation(block);
         } else{
@@ -118,8 +120,8 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
 			return;
 		}
 		final CraftingOperation operation = new CraftingOperation(next);
-		PROCESSOR.startOperation(block, operation);
-		PROCESSOR.updateProgressBar(inv, statusSlot(), operation);
+		MACHINE_PROCESSOR.startOperation(block, operation);
+		MACHINE_PROCESSOR.updateProgressBar(inv, statusSlot(), operation);
 	}
 
 	/**
@@ -152,7 +154,7 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
         for (ItemStack output : operation.getResults()) {
             inv.pushItem(output.clone(), outputSlots());
         }
-        PROCESSOR.endOperation(block);
+        MACHINE_PROCESSOR.endOperation(block);
     }
 
 	/**
@@ -163,7 +165,7 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
 	 */
 	public void executeProgress(Block block, CraftingOperation operation) {
         operation.addProgress(speed());
-        PROCESSOR.updateProgressBar(BlockStorage.getInventory(block), statusSlot(), operation);
+        MACHINE_PROCESSOR.updateProgressBar(BlockStorage.getInventory(block), statusSlot(), operation);
     }
 
 	/**
@@ -185,7 +187,7 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
         }
 
         final Map<Integer, Integer> found = new HashMap<>();
-        for (MachineRecipe recipe : RECIPES) {
+        for (MachineRecipe recipe : MACHINE_RECIPES) {
             for (ItemStack input : recipe.getInput()) {
                 for (int slot : inputSlots()) {
                     if (SlimefunUtils.isItemSimilar(inventory.get(slot), input, false, true, false)) {
@@ -216,9 +218,9 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
     @Override
     @Nonnull
     public List<ItemStack> getDisplayRecipes() {
-        List<ItemStack> displayRecipes = new ArrayList<>(RECIPES.size() * 2);
+        List<ItemStack> displayRecipes = new ArrayList<>(MACHINE_RECIPES.size() * 2);
 
-        for (MachineRecipe recipe : RECIPES) {
+        for (MachineRecipe recipe : MACHINE_RECIPES) {
             displayRecipes.add(recipe.getInput()[0]);
             displayRecipes.add(recipe.getOutput()[recipe.getOutput().length - 1]);
         }
@@ -233,7 +235,7 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
 	 * @param input the input
 	 * @param output the output
 	 */
-	public void setRecipe(int seconds, ItemStack input, ItemStack output) {RECIPES.add(new MachineRecipe(seconds, new ItemStack[] {input}, new ItemStack[] {output}));}
+	public void setRecipe(int seconds, ItemStack input, ItemStack output) { MACHINE_RECIPES.add(new MachineRecipe(seconds, new ItemStack[] {input}, new ItemStack[] {output}));}
 
 	/**
 	 * Sets recipe.
@@ -242,7 +244,7 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
 	 * @param input the input
 	 * @param output the output
 	 */
-	public void setRecipe(int seconds, ItemStack[] input, ItemStack[] output) {RECIPES.add(new MachineRecipe(seconds, input, output));}
+	public void setRecipe(int seconds, ItemStack[] input, ItemStack[] output) { MACHINE_RECIPES.add(new MachineRecipe(seconds, input, output));}
 
     @Nonnull
     @Override
@@ -253,7 +255,7 @@ public class Machine extends TickingMenuContainer implements EnergyNetComponent,
     @Nonnull
     @Override
     public MachineProcessor<CraftingOperation> getMachineProcessor() {
-        return PROCESSOR;
+        return MACHINE_PROCESSOR;
     }
 
     @Override

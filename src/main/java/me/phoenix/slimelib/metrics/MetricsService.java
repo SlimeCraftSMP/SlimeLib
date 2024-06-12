@@ -18,6 +18,8 @@ import java.util.logging.Level;
 @SuppressWarnings("UnstableApiUsage")
 public class MetricsService{
 
+	public static final String SERVER_UUID = "serverUuid";
+
 	private final JavaPlugin plugin;
 
 	private final MetricsBase metricsBase;
@@ -34,9 +36,9 @@ public class MetricsService{
 		final File bStatsFolder = new File(plugin.getDataFolder().getParentFile(), "bStats");
 		final File configFile = new File(bStatsFolder, "config.yml");
 		final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-		if(!config.isSet("serverUuid")){
+		if(!config.isSet(SERVER_UUID)){
 			config.addDefault("enabled", true);
-			config.addDefault("serverUuid", UUID.randomUUID().toString());
+			config.addDefault(SERVER_UUID, UUID.randomUUID().toString());
 			config.addDefault("logFailedRequests", false);
 			config.addDefault("logSentData", false);
 			config.addDefault("logResponseStatusText", false);
@@ -44,10 +46,12 @@ public class MetricsService{
 			config.options().setHeader(List.of("bStats (https://bStats.org) collects some basic information for plugin authors, like how " + "many people use their plugin and their total player count. It's recommended to keep bStats " + "enabled, but if you're not comfortable with this, you can turn this setting off. There is no " + "performance penalty associated with having metrics enabled, and data sent to bStats is fully " + "anonymous.")).copyDefaults(true);
 			try{
 				config.save(configFile);
-			} catch(IOException ignored){ }
+			} catch(IOException e){
+				throw new RuntimeException("Error saving config!");
+			}
 		}
 		// Load the data
-		final String serverUUID = config.getString("serverUuid");
+		final String serverUUID = config.getString(SERVER_UUID);
 		final boolean enabled = config.getBoolean("enabled", true);
 		final boolean logErrors = config.getBoolean("logFailedRequests", false);
 		final boolean logSentData = config.getBoolean("logSentData", false);
@@ -55,7 +59,7 @@ public class MetricsService{
 		metricsBase = new MetricsBase("bukkit", serverUUID, serviceId, enabled, this::appendPlatformData, this::appendServiceData,
 				submitDataTask -> Bukkit.getScheduler().runTask(plugin, submitDataTask), plugin::isEnabled,
 				(message, error) -> this.plugin.getLogger().log(Level.WARNING, message, error),
-				(message) -> this.plugin.getLogger().log(Level.INFO, message), logErrors, logSentData, logResponseStatusText
+				message -> this.plugin.getLogger().log(Level.INFO, message), logErrors, logSentData, logResponseStatusText
 		);
 	}
 

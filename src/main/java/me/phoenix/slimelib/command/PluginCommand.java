@@ -3,6 +3,7 @@ package me.phoenix.slimelib.command;
 import me.phoenix.slimelib.SlimeLib;
 import me.phoenix.slimelib.command.annotation.CommandAction;
 import me.phoenix.slimelib.command.object.CommandInfo;
+import me.phoenix.slimelib.other.Validate;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,9 +35,29 @@ public class PluginCommand {
 
 	private void registerCommand(Method method, JavaPlugin plugin, CommandAction action){
 		SlimeLib.commandRegistry().command(new CommandInfo(
-				action.command(), action.argument(), action.permission(), action.syntax(), method, plugin
+				action.command(), registerArray(action.argument()), registerString(action.permission()), registerString(action.syntax()), method, plugin
 		));
 		plugin.getCommand(action.command()).setExecutor(new CommandLogic());
+	}
+
+	private String registerString(String string){
+		if(Validate.notNull(string)){
+			return string;
+		} else {
+			return null;
+		}
+	}
+
+	private String[] registerArray(String argument){
+		if(Validate.notNull(argument)){
+			if(argument.contains(" ")){
+				return argument.split(" ");
+			} else{
+				return new String[]{argument};
+			}
+		} else{
+			return null;
+		}
 	}
 
 	/**

@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Config{
     private final JavaPlugin plugin;
     private final File file;
-    private YamlConfiguration config;
+    private YamlConfiguration configuration;
 
     /**
      * Instantiates a new Config.
@@ -25,7 +25,7 @@ public class Config{
     public Config(JavaPlugin plugin, File file, YamlConfiguration configuration, long savePeriod){
         this.plugin = plugin;
         this.file = file;
-        this.config = configuration;
+        this.configuration = configuration;
         if(savePeriod != -1){
             new PeriodicConfigSaver(this).runTaskTimer(plugin, 20, savePeriod);
         }
@@ -61,7 +61,7 @@ public class Config{
      * @return the string
      */
     public Object value(String path){
-        return this.config.get(path);
+        return this.configuration.get(path);
     }
 
     /**
@@ -72,7 +72,7 @@ public class Config{
      * @return the string
      */
     public String stringValue(String path){
-        return this.config.getString(path);
+        return this.configuration.getString(path);
     }
 
     /**
@@ -83,7 +83,7 @@ public class Config{
      * @return the string
      */
     public boolean booleanValue(String path){
-        return this.config.getBoolean(path);
+        return this.configuration.getBoolean(path);
     }
 
     /**
@@ -93,7 +93,7 @@ public class Config{
      * @param value the value
      */
     public void value(String path, Object value){
-        this.config.set(path, value);
+        this.configuration.set(path, value);
     }
 
     /**
@@ -116,14 +116,14 @@ public class Config{
      * @return true if it contains that path, false otherwise
      */
     public boolean contains(String path){
-        return config.contains(path);
+        return configuration.contains(path);
     }
 
     /**
      * Reloads the config.
      */
     public void reload(){
-        this.config = YamlConfiguration.loadConfiguration(this.file);
+        this.configuration = YamlConfiguration.loadConfiguration(this.file);
         save();
     }
 
@@ -132,8 +132,10 @@ public class Config{
      */
     public void save(){
         try{
-            this.config.save(file);
-        } catch(IOException ignored){ }
+            this.configuration.save(file);
+        } catch(IOException e){
+	        throw new RuntimeException("Error saving config!");
+        }
     }
 
     /**
@@ -160,6 +162,6 @@ public class Config{
      * @return the yaml configuration
      */
     public YamlConfiguration config(){
-        return this.config;
+        return this.configuration;
     }
 }

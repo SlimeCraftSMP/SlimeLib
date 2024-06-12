@@ -47,19 +47,19 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
 	/**
 	 * The fuels that the generator can accept.
 	 */
-	public final Set<MachineFuel> FUELS = new HashSet<>();
+	public final Set<MachineFuel> MACHINE_FUEL = new HashSet<>();
 	/**
 	 * The generator processor.
 	 */
-	public final MachineProcessor<FuelOperation> PROCESSOR = new MachineProcessor<>(this);
+	public final MachineProcessor<FuelOperation> MACHINE_PROCESSOR = new MachineProcessor<>(this);
 	/**
 	 * The energy capacity of the generator.
 	 */
-	public int capacity;
+	private int capacity;
 	/**
 	 * The energy production of the generator.
 	 */
-	public int production;
+	private int production;
 
 	/**
 	 * Instantiates a new Generator.
@@ -77,7 +77,7 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
         this.capacity = capacity;
         this.production = production;
 
-        PROCESSOR.setProgressBar(statusItem());
+        MACHINE_PROCESSOR.setProgressBar(statusItem());
 
         registerFuels();
     }
@@ -85,7 +85,9 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
 	/**
 	 * Register fuels.
 	 */
-	public void registerFuels() {}
+	public void registerFuels() {
+		// Use this to register fuels
+	}
 
 	@Override
     public void onBreak(@Nonnull Block block) {
@@ -97,14 +99,14 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
             inv.dropItems(location, outputSlots());
         }
 
-        PROCESSOR.endOperation(block);
+        MACHINE_PROCESSOR.endOperation(block);
         BlockStorage.clearBlockInfo(block);
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public int getGeneratedOutput(Location l, @Deprecated Config data) {
-        final FuelOperation operation = PROCESSOR.getOperation(l);
+        final FuelOperation operation = MACHINE_PROCESSOR.getOperation(l);
         if(operation == null){
             return nullOperation(l);
         } else{
@@ -132,8 +134,8 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
             }
 
             final FuelOperation operation = new FuelOperation(fuel.getInput(), fuel.getOutput(), fuel.getTicks());
-            PROCESSOR.startOperation(location, operation);
-            PROCESSOR.updateProgressBar(inv, statusSlot(), operation);
+            MACHINE_PROCESSOR.startOperation(location, operation);
+            MACHINE_PROCESSOR.updateProgressBar(inv, statusSlot(), operation);
         }
 
         return 0;
@@ -169,7 +171,7 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
             inv.pushItem(new ItemStack(Material.BUCKET), outputSlots());
         }
         inv.replaceExistingItem(statusSlot(), UIComponent.IDLE.item());
-        PROCESSOR.endOperation(location);
+        MACHINE_PROCESSOR.endOperation(location);
         return 0;
     }
 
@@ -187,7 +189,7 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
         }
 
         operation.addProgress(1);
-        PROCESSOR.updateProgressBar(BlockStorage.getInventory(location), statusSlot(), operation);
+        MACHINE_PROCESSOR.updateProgressBar(BlockStorage.getInventory(location), statusSlot(), operation);
         return production();
     }
 
@@ -210,7 +212,7 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
 	 * @return the machine fuel
 	 */
 	public MachineFuel findRecipe(BlockMenu menu, Map<Integer, Integer> found) {
-        for (MachineFuel fuel : FUELS) {
+        for (MachineFuel fuel : MACHINE_FUEL) {
             for (int slot : inputSlots()) {
                 if (fuel.test(menu.getItemInSlot(slot))) {
                     found.put(slot, fuel.getInput().getAmount());
@@ -229,14 +231,14 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
 	 * @param input the input
 	 * @param output the output
 	 */
-	public void fuel(int seconds, ItemStack input, ItemStack output) {FUELS.add(new MachineFuel(seconds, input, output));}
+	public void fuel(int seconds, ItemStack input, ItemStack output) { MACHINE_FUEL.add(new MachineFuel(seconds, input, output));}
 
     @Override
     @Nonnull
     public List<ItemStack> getDisplayRecipes() {
         final List<ItemStack> list = new ArrayList<>();
 
-        for (MachineFuel fuel : FUELS) {
+        for (MachineFuel fuel : MACHINE_FUEL) {
             final ItemStack item = fuel.getInput().clone();
 	        final ItemMeta im = item.getItemMeta();
 	        final List<Component> lore = new ArrayList<>();
@@ -253,7 +255,7 @@ public class Generator extends TickingMenuContainer implements EnergyNetProvider
 
     @Nonnull
     @Override
-    public MachineProcessor<FuelOperation> getMachineProcessor() {return PROCESSOR;}
+    public MachineProcessor<FuelOperation> getMachineProcessor() {return MACHINE_PROCESSOR;}
 
     public int getCapacity() {
         return this.capacity;

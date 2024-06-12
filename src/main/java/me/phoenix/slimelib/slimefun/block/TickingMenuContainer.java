@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 /**
  * Represents a Block that has an in-built Menu which ticks periodically.
  */
-public abstract class TickingMenuContainer extends MenuContainer {
+public class TickingMenuContainer extends MenuContainer {
 
 	/**
 	 * Instantiates a new Ticking menu container.

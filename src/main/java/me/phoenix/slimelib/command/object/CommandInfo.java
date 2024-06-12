@@ -11,8 +11,8 @@ import java.lang.reflect.Method;
 public record CommandInfo(
 		String command,
 		@Nullable String[] arguments,
-		String permission,
-		String syntax,
+		@Nullable String permission,
+		@Nullable String syntax,
 		Method method,
 		JavaPlugin plugin
 ){ }

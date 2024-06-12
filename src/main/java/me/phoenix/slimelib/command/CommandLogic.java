@@ -2,7 +2,6 @@ package me.phoenix.slimelib.command;
 
 import me.phoenix.slimelib.SlimeLib;
 import me.phoenix.slimelib.command.object.CommandInfo;
-import me.phoenix.slimelib.other.Validate;
 import me.phoenix.slimelib.visual.Styles;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,13 +22,13 @@ public class CommandLogic implements CommandExecutor{
 			if(!command.getName().equalsIgnoreCase(commandInfo.command())){
 				continue;
 			}
-			if(!hasPermission(sender, commandInfo)){
+			if(!hasPermission(sender, command, commandInfo)){
 				return false;
 			}
 			if(commandInfo.arguments() != null && args.length < commandInfo.arguments().length){
 				sender.sendMessage(
-						Styles.ERROR.apply("/" + commandInfo.command() + Arrays.toString(commandInfo.arguments())).appendNewline().append(
-								Styles.text(Validate.notNull(commandInfo.syntax()) ? commandInfo.syntax() : command.getDescription())
+						Styles.ERROR.apply("/" + commandInfo.command() + " " + Arrays.toString(commandInfo.arguments())).appendNewline().append(
+								Styles.text(commandInfo.syntax() != null ? commandInfo.syntax() : command.getDescription())
 						)
 				);
 				return false;
@@ -38,15 +37,15 @@ public class CommandLogic implements CommandExecutor{
 				commandInfo.method().invoke(null, sender, args);
 				return true;
 			} catch(Exception e){
-				return false;
+				throw new RuntimeException(e);
 			}
 		}
 		return false;
 	}
 
-	private boolean hasPermission(CommandSender sender, CommandInfo commandInfo){
-		return sender.isOp()
-				       || sender.hasPermission(commandInfo.plugin().getName().toLowerCase(Locale.ROOT)+".admin")
-				       || (Validate.notNull(commandInfo.permission()) && sender.hasPermission(commandInfo.permission()));
+	private boolean hasPermission(CommandSender sender, Command command, CommandInfo commandInfo){
+		final boolean permission = commandInfo.permission() != null ? sender.hasPermission(commandInfo.permission())
+				                           : command.getPermission() != null && sender.hasPermission(command.getPermission());
+		return sender.isOp() || sender.hasPermission(commandInfo.plugin().getName().toLowerCase(Locale.ROOT)+".admin") || permission;
 	}
 }

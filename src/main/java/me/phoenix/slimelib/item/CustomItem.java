@@ -105,11 +105,11 @@ public class CustomItem extends ItemStack {
 	            im.lore(lines);
             }
 
-            if (im instanceof LeatherArmorMeta) {
-                ((LeatherArmorMeta) im).setColor(color);
+            if (im instanceof LeatherArmorMeta leatherArmorMeta) {
+	            leatherArmorMeta.setColor(color);
             }
-            if (im instanceof PotionMeta) {
-                ((PotionMeta) im).setColor(color);
+            if (im instanceof PotionMeta potionMeta) {
+	            potionMeta.setColor(color);
             }
         });
     }

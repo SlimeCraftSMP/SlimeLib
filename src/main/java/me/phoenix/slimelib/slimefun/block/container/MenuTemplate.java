@@ -33,7 +33,9 @@ public final class MenuTemplate extends BlockMenuPreset {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+		// Already implemented in other methods.
+    }
 
     @Override
     public void newInstance(BlockMenu menu, Block block) {

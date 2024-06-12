@@ -25,7 +25,7 @@ import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 /**
  * Represents a Block that has an in-built Menu.
  */
-public abstract class MenuContainer extends SlimefunItem {
+public class MenuContainer extends SlimefunItem {
 
 	/**
 	 * Instantiates a new Menu container.

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public final class SlimeLib extends JavaPlugin {
 
     // Important
-    private static SlimeLib instance;
+    private static final SlimeLib instance = new SlimeLib();
 
     // Configuration
     private final Config config = new Config(this, "config.yml", -1);
@@ -26,11 +26,6 @@ public final class SlimeLib extends JavaPlugin {
 
     // Registry
     private final CommandRegistry commandRegistry = new CommandRegistry();
-
-    /**
-     * Instance of SlimeLib.
-     */
-    public SlimeLib(){ instance = this;}
 
     /**
      * Instance of SlimeLib.

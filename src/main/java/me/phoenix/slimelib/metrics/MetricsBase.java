@@ -3,14 +3,16 @@ package me.phoenix.slimelib.metrics;
 import me.phoenix.slimelib.metrics.chart.CustomChart;
 import me.phoenix.slimelib.metrics.object.JsonObject;
 import me.phoenix.slimelib.metrics.object.JsonObjectBuilder;
+import me.phoenix.slimelib.other.RandomUtils;
 import me.phoenix.slimelib.other.TypeUtils;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Objects;
@@ -28,9 +30,6 @@ import java.util.zip.GZIPOutputStream;
  */
 public class MetricsBase{
 
-	/**
-	 * The constant METRICS_VERSION.
-	 */
 	public static final String METRICS_VERSION = "3.0.2";
 
 	private static final String REPORT_URL = "https://bStats.org/api/v2/data/%s";
@@ -83,9 +82,9 @@ public class MetricsBase{
 	 * @param logResponseStatusText the log response status text
 	 */
 	public MetricsBase(String platform, String serverUuid, int serviceId, boolean enabled, Consumer<JsonObjectBuilder> appendPlatformDataConsumer, Consumer<JsonObjectBuilder> appendServiceDataConsumer, Consumer<Runnable> submitTaskConsumer, Supplier<Boolean> checkServiceEnabledSupplier, BiConsumer<String, Throwable> errorLogger, Consumer<String> infoLogger, boolean logErrors, boolean logSentData, boolean logResponseStatusText){
-		final ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(1, task -> new Thread(task, "bStats-MetricsService"));
-		scheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
-		this.scheduler = scheduler;
+		final ScheduledThreadPoolExecutor threadPoolExecutor = new ScheduledThreadPoolExecutor(1, task -> new Thread(task, "bStats-MetricsService"));
+		threadPoolExecutor.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
+		this.scheduler = threadPoolExecutor;
 		this.platform = platform;
 		this.serverUuid = serverUuid;
 		this.serviceId = serviceId;
@@ -111,7 +110,9 @@ public class MetricsBase{
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		try(final GZIPOutputStream gzip = new GZIPOutputStream(outputStream)){
 			gzip.write(str.getBytes(StandardCharsets.UTF_8));
-		} catch(Exception ignored){}
+		} catch(IOException e){
+			throw new RuntimeException("Error compressing data!");
+		}
 		return outputStream.toByteArray();
 	}
 
@@ -126,7 +127,7 @@ public class MetricsBase{
 
 	private void startSubmitting(){
 		final Runnable submitTask = () -> {
-			if(!enabled || !checkServiceEnabledSupplier.get()){
+			if(enabled && Boolean.FALSE.equals(checkServiceEnabledSupplier.get())){
 				scheduler.shutdown();
 				return;
 			}
@@ -136,8 +137,8 @@ public class MetricsBase{
 				this.submitData();
 			}
 		};
-		final long initialDelay = (long) (1000 * 60 * (3 + Math.random() * 3));
-		final long secondDelay = (long) (1000 * 60 * (Math.random() * 30));
+		final long initialDelay = 1000L * 60 * (3 + RandomUtils.randomInt(0, 3));
+		final long secondDelay = 1000L * 60 * (RandomUtils.randomInt(0, 30));
 		scheduler.schedule(submitTask, initialDelay, TimeUnit.MILLISECONDS);
 		scheduler.scheduleAtFixedRate(submitTask, initialDelay + secondDelay, 1000 * 60 * 30, TimeUnit.MILLISECONDS);
 	}
@@ -170,7 +171,7 @@ public class MetricsBase{
 			infoLogger.accept("Sent bStats metrics data: " + data.toString());
 		}
 		final String url = String.format(REPORT_URL, platform);
-		final HttpsURLConnection connection = (HttpsURLConnection) new URL(url).openConnection();
+		final HttpsURLConnection connection = (HttpsURLConnection) new URI(url).toURL().openConnection();
 		// Compress the data to save bandwidth
 		final byte[] compressedData = compress(data.toString());
 		connection.setRequestMethod("POST");

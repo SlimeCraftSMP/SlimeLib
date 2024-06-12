@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
  */
 public class JsonObjectBuilder{
 
+	public static final String NULL_ERROR = "JSON value must not be null";
+
 	private StringBuilder builder = new StringBuilder();
 
 	private boolean hasAtLeastOneField = false;
@@ -62,7 +64,7 @@ public class JsonObjectBuilder{
 	 */
 	public JsonObjectBuilder appendField(String key, String value){
 		if(value == null){
-			throw new IllegalArgumentException("JSON value must not be null");
+			throw new IllegalArgumentException(NULL_ERROR);
 		}
 		appendFieldUnescaped(key, "\"" + escape(value) + "\"");
 		return this;
@@ -107,7 +109,7 @@ public class JsonObjectBuilder{
 	 */
 	public JsonObjectBuilder appendField(String key, String[] values){
 		if(values == null){
-			throw new IllegalArgumentException("JSON values must not be null");
+			throw new IllegalArgumentException(NULL_ERROR);
 		}
 		String escapedValues = Arrays.stream(values).map(value -> "\"" + escape(value) + "\"").collect(Collectors.joining(","));
 		appendFieldUnescaped(key, "[" + escapedValues + "]");
@@ -124,7 +126,7 @@ public class JsonObjectBuilder{
 	 */
 	public JsonObjectBuilder appendField(String key, int[] values){
 		if(values == null){
-			throw new IllegalArgumentException("JSON values must not be null");
+			throw new IllegalArgumentException(NULL_ERROR);
 		}
 		String escapedValues = Arrays.stream(values).mapToObj(String::valueOf).collect(Collectors.joining(","));
 		appendFieldUnescaped(key, "[" + escapedValues + "]");
@@ -141,7 +143,7 @@ public class JsonObjectBuilder{
 	 */
 	public JsonObjectBuilder appendField(String key, JsonObject[] values){
 		if(values == null){
-			throw new IllegalArgumentException("JSON values must not be null");
+			throw new IllegalArgumentException(NULL_ERROR);
 		}
 		String escapedValues = Arrays.stream(values).map(JsonObject::toString).collect(Collectors.joining(","));
 		appendFieldUnescaped(key, "[" + escapedValues + "]");

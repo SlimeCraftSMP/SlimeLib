@@ -20,11 +20,10 @@ public @interface CommandAction{
 
 	/**
 	 * The command argument, e.g. "%player%" or "%file%"
-	 * If you do not wish to use arguments, just use null
 	 *
 	 * @return the argument
 	 */
-	String[] argument();
+	String argument() default "null";
 
 	/**
 	 * The permission to use the command, e.g. "yourPlugin.admin".
