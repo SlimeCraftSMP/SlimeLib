@@ -28,11 +28,6 @@
         <!-- Slimefun properties -->
         <slimefun.version>1a4011c2bd</slimefun.version>
         <slimefun.javadocs>https://slimefun.github.io/javadocs/Slimefun4/docs/</slimefun.javadocs>
-
-        <!-- Settings for sonarcloud.io -->
-        <sonar.projectKey>SlimeCraftSMP_SlimeLib</sonar.projectKey>
-        <sonar.organization>slimecraftsmp</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <issueManagement>
