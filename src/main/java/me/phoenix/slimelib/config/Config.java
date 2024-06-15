@@ -1,167 +1,236 @@
 package me.phoenix.slimelib.config;
 
+import me.phoenix.slimelib.other.SchedulerUtils;
+import me.phoenix.slimelib.other.TypeUtils;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * A Yaml config implementation.
+ * A Config implementation with various utilities for plugin development.
  */
-public class Config{
-    private final JavaPlugin plugin;
-    private final File file;
-    private YamlConfiguration configuration;
+public class Config extends YamlConfiguration{
 
-    /**
-     * Instantiates a new Config.
-     *
-     * @param plugin the plugin
-     * @param file the file
-     * @param configuration the configuration
-     * @param savePeriod the save period (-1 to disable auto-save)
-     */
-    public Config(JavaPlugin plugin, File file, YamlConfiguration configuration, long savePeriod){
-        this.plugin = plugin;
-        this.file = file;
-        this.configuration = configuration;
-        if(savePeriod != -1){
-            new PeriodicConfigSaver(this).runTaskTimer(plugin, 20, savePeriod);
-        }
-    }
+	private YamlConfiguration config;
+	private File file;
+	private JavaPlugin plugin;
+	private String path;
 
-    /**
-     * Instantiates a new Config.
-     *
-     * @param plugin the plugin
-     * @param file the file
-     * @param savePeriod the save period (-1 to disable auto-save)
-     */
-    public Config(JavaPlugin plugin, File file, long savePeriod){
-        this(plugin, file, YamlConfiguration.loadConfiguration(file), savePeriod);
-    }
+	private Config(YamlConfiguration config){
+		this.config = config;
+	}
 
-    /**
-     * Instantiates a new Config.
-     *
-     * @param plugin the plugin
-     * @param path the path
-     * @param savePeriod the save period (-1 to disable auto-save)
-     */
-    public Config(JavaPlugin plugin, String path, long savePeriod){
-        this(plugin, new File(plugin.getDataFolder(), path), savePeriod);
-    }
+	private Config(File file){
+		this(YamlConfiguration.loadConfiguration(file));
+		this.file = file;
+	}
 
-    /**
-     * Get the value at a particular path as an object.
-     *
-     * @param path the path
-     *
-     * @return the string
-     */
-    public Object value(String path){
-        return this.configuration.get(path);
-    }
+	/**
+	 * Creates a new Config.
+	 *
+	 * @param plugin the plugin
+	 * @param path the path
+	 * @param savePeriod the save period, if you wish to disable auto saving use {@link Config(JavaPlugin, String)}
+	 */
+	public Config(JavaPlugin plugin, String path, int savePeriod){
+		this(new File(plugin.getDataFolder(), path));
+		this.plugin = plugin;
+		this.path = path;
+		if(invalidConfig()){
+			plugin.saveResource(path, true);
+		}
+		if(savePeriod != -1){
+			SchedulerUtils.repeatTask(plugin, this::save, savePeriod);
+		}
+	}
 
-    /**
-     * Get the value at a particular path as a string.
-     *
-     * @param path the path
-     *
-     * @return the string
-     */
-    public String stringValue(String path){
-        return this.configuration.getString(path);
-    }
+	/**
+	 * Creates a new Config without auto-save.
+	 *
+	 * @param plugin the plugin
+	 * @param path the path
+	 */
+	public Config(JavaPlugin plugin, String path){
+		this(plugin, path, -1);
+	}
 
-    /**
-     * Get the value at a particular path as a boolean.
-     *
-     * @param path the path
-     *
-     * @return the string
-     */
-    public boolean booleanValue(String path){
-        return this.configuration.getBoolean(path);
-    }
+	/**
+	 * Checks if a file is invalid.
+	 *
+	 * @return true if its invalid, false otherwise
+	 */
+	public boolean invalidFile(){
+		return file == null || !file.exists();
+	}
 
-    /**
-     * Set the value at a particular path.
-     *
-     * @param path the path
-     * @param value the value
-     */
-    public void value(String path, Object value){
-        this.configuration.set(path, value);
-    }
+	/**
+	 * Checks if config is invalid.
+	 *
+	 * @return true if its invalid, false otherwise
+	 */
+	public boolean invalidConfig(){
+		return invalidFile() || config == null;
+	}
 
-    /**
-     * Set the default value at a particular path.
-     *
-     * @param path the path
-     * @param value the value
-     */
-    public void defaultValue(String path, Object value){
-        if(!contains(path)){
-            value(path, value);
-        }
-    }
+	/**
+	 * Resets the file.
+	 * @implNote This WILL delete all configurations made by the server owner, use cautiously
+	 */
+	public void resetFile(){
+		file = new File(plugin.getDataFolder(), path);
+		plugin.saveResource(path, true);
+	}
 
-    /**
-     * Checks if the config contains a particular path.
-     *
-     * @param path the path
-     *
-     * @return true if it contains that path, false otherwise
-     */
-    public boolean contains(String path){
-        return configuration.contains(path);
-    }
+	/**
+	 * Reset the config.
+	 * @implNote This WILL delete all configurations made by the server owner, use cautiously
+	 */
+	public void resetConfig(){
+		resetFile();
+		config = YamlConfiguration.loadConfiguration(file);
+	}
 
-    /**
-     * Reloads the config.
-     */
-    public void reload(){
-        this.configuration = YamlConfiguration.loadConfiguration(this.file);
-        save();
-    }
+	/**
+	 * Get a list of ItemStacks of the format - "ITEM:AMOUNT".
+	 *
+	 * @param path the path
+	 *
+	 * @return the list
+	 */
+	public List<ItemStack> getItems(String path){
+		if(invalidConfig()){
+			resetConfig();
+		}
+		final List<ItemStack> items = new ArrayList<>();
+		for(String itemString : getStringList(path)){
+			final String[] parts = itemString.split(":");
+			if(parts.length != 2){
+				continue;
+			}
+			final Material material = Material.getMaterial(parts[0]);
+			if(material == null){
+				continue;
+			}
+			final int amount = TypeUtils.asInt(parts[1]);
+			if(amount == -1){
+				continue;
+			}
+			items.add(new ItemStack(material, amount));
+		}
+		return items;
+	}
 
-    /**
-     * Saves the config.
-     */
-    public void save(){
-        try{
-            this.configuration.save(file);
-        } catch(IOException e){
-	        throw new RuntimeException("Error saving config!");
-        }
-    }
+	/**
+	 * Get a map of EntityType and their amount of the format - "ENTITY:AMOUNT".
+	 *
+	 * @param path the path
+	 *
+	 * @return the map
+	 */
+	public Map<EntityType, Integer> getEntities(String path){
+		if(invalidConfig()){
+			resetConfig();
+		}
+		final Map<EntityType, Integer> entities = new HashMap<>();
+		for(String mobString : getStringList(path)){
+			final String[] parts = mobString.split(" ");
+			if(parts.length != 2){
+				continue;
+			}
+			final EntityType entity = EntityType.fromName(parts[0]);
+			if(entity == null){
+				continue;
+			}
+			final int amount = TypeUtils.asInt(parts[1]);
+			if(amount == -1){
+				continue;
+			}
+			entities.putIfAbsent(entity, amount);
+		}
+		return entities;
+	}
 
-    /**
-     * Get the JavaPlugin that created this config.
-     *
-     * @return the plugin
-     */
-    public JavaPlugin plugin(){
-        return this.plugin;
-    }
+	/**
+	 * Sets the default value at a path.
+	 *
+	 * @param path the path
+	 * @param value the value
+	 */
+	public void defaultValue(String path, Object value){
+		if(invalidConfig()){
+			resetConfig();
+		}
+		if(!contains(path)){
+			set(path, value);
+		}
+	}
 
-    /**
-     * Get the File object.
-     *
-     * @return the file
-     */
-    public File file(){
-        return this.file;
-    }
+	/**
+	 * Saves the config.
+	 */
+	public void save(){
+		if(invalidConfig()){
+			resetConfig();
+		} else{
+			try{
+				super.save(file);
+			} catch(IOException e){
+				throw new RuntimeException("Could not save config!");
+			}
+		}
+	}
 
-    /**
-     * Get the YamlConfiguration object.
-     *
-     * @return the yaml configuration
-     */
-    public YamlConfiguration config(){
-        return this.configuration;
-    }
+	/**
+	 * Reloads the config.
+	 */
+	public void reload(){
+		if(invalidConfig()){
+			resetConfig();
+		} else{
+			config = YamlConfiguration.loadConfiguration(file);
+			save();
+		}
+	}
+
+	/**
+	 * Returns the plugin that made the config.
+	 *
+	 * @return the java plugin
+	 */
+	public JavaPlugin plugin(){
+		return plugin;
+	}
+
+	/**
+	 * Returns the file the config is stored in, resets it if its invalid.
+	 *
+	 * @return the file
+	 */
+	public File file(){
+		if(invalidFile()){
+			resetConfig();
+		}
+		return file;
+	}
+
+	/**
+	 * Returns the config object, resets it if its invalid.
+	 *
+	 * @return the yaml configuration
+	 */
+	public YamlConfiguration config(){
+		if(invalidConfig()){
+			resetConfig();
+		}
+		return config;
+	}
 }

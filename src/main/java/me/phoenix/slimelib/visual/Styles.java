@@ -6,6 +6,7 @@ import me.phoenix.slimelib.other.TypeUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Color;
@@ -16,6 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Used to make the visuals of your addon uniform throughout.
@@ -26,15 +28,6 @@ public class Styles{
 	 * The constant MiniMessage reference.
 	 */
 	public static final MiniMessage minimessage = MiniMessage.miniMessage();
-
-	/**
-	 * Fix component. Used to fix the default italics text in components.
-	 *
-	 * @return the component
-	 */
-	public static Component fix(){
-        return minimessage.deserialize("<!i>");
-    }
 
 	// Message
 
@@ -120,7 +113,7 @@ public class Styles{
 	 */
 	@Nonnull
 	public static Component text(@Nonnull Object value) {
-		return minimessage.deserialize(TypeUtils.asString(value));
+		return minimessage.deserialize("<!i>" + TypeUtils.asString(value));
 	}
 
 	/**
@@ -132,7 +125,7 @@ public class Styles{
 	 */
 	@Nonnull
     public Component apply(@Nonnull Object value) {
-        return fix().append(Component.text(TypeUtils.asString(value), color));
+        return Component.text(TypeUtils.asString(value), color).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
     }
 
 	/**
@@ -333,4 +326,36 @@ public class Styles{
                 finalLore.toArray(new Component[finalLore.size() - 1])
         );
     }
+
+	/**
+	 * Converts an item/other id into human-readable format.
+	 *
+	 * @param id the id
+	 *
+	 * @return the formatted id
+	 */
+	@Nonnull
+	public static String humanize(String id) {
+		final StringBuilder builder = new StringBuilder();
+		final String[] words = id.toLowerCase(Locale.ROOT).split("_");
+
+		builder.append(title(words[0]));
+		for (int i = 1; i < words.length; i++) {
+			builder.append(' ').append(title(words[i]));
+		}
+
+		return builder.toString();
+	}
+
+	/**
+	 * Converts a word into title by capitalizing the first letter.
+	 *
+	 * @param word the word
+	 *
+	 * @return the formatted word
+	 */
+	@Nonnull
+	public static String title(String word){
+		return Character.toUpperCase(word.charAt(0)) + word.substring(1);
+	}
 }

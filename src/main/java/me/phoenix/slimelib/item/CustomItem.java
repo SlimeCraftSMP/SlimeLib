@@ -1,6 +1,7 @@
 package me.phoenix.slimelib.item;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -70,15 +71,11 @@ public class CustomItem extends ItemStack {
 	public CustomItem(ItemStack item, Component name, Component... lore) {
         this(item, im -> {
             if (name != null) {
-                im.displayName(Styles.fix().append(name));
+                im.displayName(name);
             }
 
             if (lore.length > 0) {
-				final List<Component> lines = new ArrayList<>();
-	            for(Component component : lore){
-					lines.add(Styles.fix().append(component));
-	            }
-	            im.lore(lines);
+	            im.lore(Arrays.asList(lore));
             }
         });
     }
@@ -94,15 +91,11 @@ public class CustomItem extends ItemStack {
 	public CustomItem(ItemStack item, Color color, Component name, Component... lore) {
         this(item, im -> {
             if (name != null) {
-                im.displayName(Styles.fix().append(name));
+                im.displayName(name);
             }
 
             if (lore.length > 0) {
-	            final List<Component> lines = new ArrayList<>();
-	            for(Component component : lore){
-		            lines.add(Styles.fix().append(component));
-	            }
-	            im.lore(lines);
+	            im.lore(Arrays.asList(lore));
             }
 
             if (im instanceof LeatherArmorMeta leatherArmorMeta) {

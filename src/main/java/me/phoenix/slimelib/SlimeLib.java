@@ -18,7 +18,7 @@ public final class SlimeLib extends JavaPlugin {
     // Important
     private static SlimeLib instance;
 
-    // Configuration
+    // Config
     private final Config config = new Config(this, "config.yml", -1);
 
     // Service
@@ -87,7 +87,7 @@ public final class SlimeLib extends JavaPlugin {
     private void setupMetrics(){
         metrics.addCustomChart(
                 new SimplePie("auto_update",
-                        () -> config.booleanValue("options.auto-update") ? "Enabled" : "Disabled"
+                        () -> config.getBoolean("options.auto-update") ? "Enabled" : "Disabled"
                 )
         );
     }
