@@ -1,7 +1,7 @@
 package me.phoenix.slimelib.item;
 
 import io.github.thebusybiscuit.slimefun4.libraries.dough.data.persistent.PersistentDataAPI;
-import me.phoenix.slimelib.other.KeyUtils;
+import me.phoenix.slimelib.SlimeLib;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataHolder;
@@ -19,7 +19,7 @@ public class CooldownUtils {
 	/**
 	 * The cooldown NamespacedKey.
 	 */
-	public static final NamespacedKey cooldownKey = KeyUtils.createKey("slimelib", "cooldown");
+	public static final NamespacedKey cooldownKey = SlimeLib.key("cooldown");
 
 	/**
 	 * Add a cooldown to an item.
@@ -55,7 +55,7 @@ public class CooldownUtils {
     }
 
 	/**
-	 *Add a cooldown to a PDC.
+	 * Add a cooldown to a PDC.
 	 *
 	 * @param holder the holder
 	 * @param milliSeconds the milliseconds

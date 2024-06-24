@@ -32,8 +32,7 @@ public enum MinecraftVersion{
 	/**
 	 * Parses a Minecraft version string and extracts the version number.
 	 *
-	 * @param versionString A string representing a Minecraft version, e.g. "1.20.x".
-	 * 		You can obtain the version number by doing {@link MinecraftVersion#serverVersion()}
+	 * @param versionString A string representing a Minecraft version, e.g. "1.20.x". 		You can obtain the version number by doing {@link MinecraftVersion#serverVersion()}
 	 * @param isMinor If true returns the minor Minecraft version, else returns the major Minecraft version
 	 *
 	 * @return The version number extracted from the input string.
@@ -50,8 +49,7 @@ public enum MinecraftVersion{
 	/**
 	 * Parses a Minecraft version string and extracts the major version number.
 	 *
-	 * @param versionString A string representing a Minecraft version, e.g. "1.20.x".
-	 * 		You can obtain the version number by doing {@link MinecraftVersion#serverVersion()}
+	 * @param versionString A string representing a Minecraft version, e.g. "1.20.x". 		You can obtain the version number by doing {@link MinecraftVersion#serverVersion()}
 	 *
 	 * @return The major version number extracted from the input string.
 	 */
@@ -62,8 +60,7 @@ public enum MinecraftVersion{
 	/**
 	 * Parses a Minecraft version string and extracts the minor version number.
 	 *
-	 * @param versionString A string representing a Minecraft version, e.g. "1.20.x".
-	 * 		You can obtain the version number by doing {@link MinecraftVersion#serverVersion()}
+	 * @param versionString A string representing a Minecraft version, e.g. "1.20.x". 		You can obtain the version number by doing {@link MinecraftVersion#serverVersion()}
 	 *
 	 * @return The minor version number extracted from the input string.
 	 */

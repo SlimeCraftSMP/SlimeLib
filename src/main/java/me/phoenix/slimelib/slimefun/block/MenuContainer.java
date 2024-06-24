@@ -87,7 +87,7 @@ public class MenuContainer extends SlimefunItem {
 	 *
 	 * @param block the block
 	 */
-    public void onBreak(@Nonnull Block block) {
+	public void onBreak(@Nonnull Block block) {
         final BlockMenu inv = BlockStorage.getInventory(block);
         final Location location = block.getLocation();
 
@@ -104,7 +104,7 @@ public class MenuContainer extends SlimefunItem {
 	 *
 	 * @param event the event
 	 */
-    public void onPlace(@Nonnull BlockPlaceEvent event) {
+	public void onPlace(@Nonnull BlockPlaceEvent event) {
         // Do stuff
     }
 
@@ -182,5 +182,5 @@ public class MenuContainer extends SlimefunItem {
 	 *
 	 * @return the status item
 	 */
-    public ItemStack statusItem() {return new CustomItem(Material.BARRIER, Styles.ERROR.apply("Please set a status bar."));}
+	public ItemStack statusItem() {return new CustomItem(Material.BARRIER, Styles.ERROR.apply("Please set a status bar."));}
 }

@@ -18,7 +18,7 @@ import java.util.logging.Level;
 @SuppressWarnings("UnstableApiUsage")
 public class MetricsService{
 
-	public static final String SERVER_UUID = "serverUuid";
+	private static final String SERVER_UUID = "serverUuid";
 
 	private final JavaPlugin plugin;
 

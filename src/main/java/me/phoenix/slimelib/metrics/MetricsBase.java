@@ -30,7 +30,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public class MetricsBase{
 
-	public static final String METRICS_VERSION = "3.0.2";
+	private static final String METRICS_VERSION = "3.0.2";
 
 	private static final String REPORT_URL = "https://bStats.org/api/v2/data/%s";
 

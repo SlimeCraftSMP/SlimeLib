@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  */
 public class JsonObjectBuilder{
 
-	public static final String NULL_ERROR = "JSON value must not be null";
+	private static final String NULL_ERROR = "JSON value must not be null";
 
 	private StringBuilder builder = new StringBuilder();
 

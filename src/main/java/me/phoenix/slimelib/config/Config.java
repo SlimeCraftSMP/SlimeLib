@@ -3,6 +3,7 @@ package me.phoenix.slimelib.config;
 import me.phoenix.slimelib.other.SchedulerUtils;
 import me.phoenix.slimelib.other.TypeUtils;
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -21,17 +22,17 @@ import java.util.Map;
 public class Config extends YamlConfiguration{
 
 	private YamlConfiguration config;
-	private File file;
-	private JavaPlugin plugin;
-	private String path;
+	private final File file;
+	private final JavaPlugin plugin;
 
-	private Config(YamlConfiguration config){
-		this.config = config;
-	}
-
-	private Config(File file){
-		this(YamlConfiguration.loadConfiguration(file));
+	private Config(JavaPlugin plugin, String path, File file){
+		this.plugin = plugin;
 		this.file = file;
+		plugin.saveResource(path, false);
+		load();
+		save();
+		this.config = YamlConfiguration.loadConfiguration(file);
+		this.config.options().copyDefaults(true);
 	}
 
 	/**
@@ -42,12 +43,7 @@ public class Config extends YamlConfiguration{
 	 * @param savePeriod the save period, if you wish to disable auto saving use {@link Config(JavaPlugin, String)}
 	 */
 	public Config(JavaPlugin plugin, String path, int savePeriod){
-		this(new File(plugin.getDataFolder(), path));
-		this.plugin = plugin;
-		this.path = path;
-		if(invalidConfig()){
-			plugin.saveResource(path, true);
-		}
+		this(plugin, path, new File(plugin.getDataFolder(), path));
 		if(savePeriod != -1){
 			SchedulerUtils.repeatTask(plugin, this::save, savePeriod);
 		}
@@ -64,42 +60,6 @@ public class Config extends YamlConfiguration{
 	}
 
 	/**
-	 * Checks if a file is invalid.
-	 *
-	 * @return true if its invalid, false otherwise
-	 */
-	public boolean invalidFile(){
-		return file == null || !file.exists();
-	}
-
-	/**
-	 * Checks if config is invalid.
-	 *
-	 * @return true if its invalid, false otherwise
-	 */
-	public boolean invalidConfig(){
-		return invalidFile() || config == null;
-	}
-
-	/**
-	 * Resets the file.
-	 * @implNote This WILL delete all configurations made by the server owner, use cautiously
-	 */
-	public void resetFile(){
-		file = new File(plugin.getDataFolder(), path);
-		plugin.saveResource(path, true);
-	}
-
-	/**
-	 * Reset the config.
-	 * @implNote This WILL delete all configurations made by the server owner, use cautiously
-	 */
-	public void resetConfig(){
-		resetFile();
-		config = YamlConfiguration.loadConfiguration(file);
-	}
-
-	/**
 	 * Get a list of ItemStacks of the format - "ITEM:AMOUNT".
 	 *
 	 * @param path the path
@@ -107,9 +67,6 @@ public class Config extends YamlConfiguration{
 	 * @return the list
 	 */
 	public List<ItemStack> getItems(String path){
-		if(invalidConfig()){
-			resetConfig();
-		}
 		final List<ItemStack> items = new ArrayList<>();
 		for(String itemString : getStringList(path)){
 			final String[] parts = itemString.split(":");
@@ -137,9 +94,6 @@ public class Config extends YamlConfiguration{
 	 * @return the map
 	 */
 	public Map<EntityType, Integer> getEntities(String path){
-		if(invalidConfig()){
-			resetConfig();
-		}
 		final Map<EntityType, Integer> entities = new HashMap<>();
 		for(String mobString : getStringList(path)){
 			final String[] parts = mobString.split(" ");
@@ -166,11 +120,19 @@ public class Config extends YamlConfiguration{
 	 * @param value the value
 	 */
 	public void defaultValue(String path, Object value){
-		if(invalidConfig()){
-			resetConfig();
-		}
 		if(!contains(path)){
 			set(path, value);
+		}
+	}
+
+	/**
+	 * Loads the config.
+	 */
+	public void load(){
+		try{
+			super.load(file);
+		} catch(IOException | InvalidConfigurationException e){
+			throw new RuntimeException("Could not save config!");
 		}
 	}
 
@@ -178,14 +140,10 @@ public class Config extends YamlConfiguration{
 	 * Saves the config.
 	 */
 	public void save(){
-		if(invalidConfig()){
-			resetConfig();
-		} else{
-			try{
-				super.save(file);
-			} catch(IOException e){
-				throw new RuntimeException("Could not save config!");
-			}
+		try{
+			super.save(file);
+		} catch(IOException e){
+			throw new RuntimeException("Could not save config!");
 		}
 	}
 
@@ -193,12 +151,9 @@ public class Config extends YamlConfiguration{
 	 * Reloads the config.
 	 */
 	public void reload(){
-		if(invalidConfig()){
-			resetConfig();
-		} else{
-			config = YamlConfiguration.loadConfiguration(file);
-			save();
-		}
+		load();
+		save();
+		config = YamlConfiguration.loadConfiguration(file);
 	}
 
 	/**
@@ -211,26 +166,20 @@ public class Config extends YamlConfiguration{
 	}
 
 	/**
-	 * Returns the file the config is stored in, resets it if its invalid.
+	 * Returns the file the config is stored in
 	 *
 	 * @return the file
 	 */
 	public File file(){
-		if(invalidFile()){
-			resetConfig();
-		}
 		return file;
 	}
 
 	/**
-	 * Returns the config object, resets it if its invalid.
+	 * Returns the config object
 	 *
 	 * @return the yaml configuration
 	 */
 	public YamlConfiguration config(){
-		if(invalidConfig()){
-			resetConfig();
-		}
 		return config;
 	}
 }

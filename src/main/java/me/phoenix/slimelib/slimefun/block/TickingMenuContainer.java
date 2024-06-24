@@ -51,7 +51,7 @@ public class TickingMenuContainer extends MenuContainer {
 	 *
 	 * @param block the block
 	 */
-    public void onTick(@Nonnull Block block) {
+	public void onTick(@Nonnull Block block) {
         //Do Stuff
     }
 }

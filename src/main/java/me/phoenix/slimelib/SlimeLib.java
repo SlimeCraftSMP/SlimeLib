@@ -1,104 +1,116 @@
 package me.phoenix.slimelib;
 
-import me.phoenix.slimelib.registry.CommandRegistry;
 import me.phoenix.slimelib.config.Config;
+import me.phoenix.slimelib.core.ReloadCommand;
 import me.phoenix.slimelib.inventory.MenuListener;
 import me.phoenix.slimelib.metrics.MetricsService;
 import me.phoenix.slimelib.metrics.chart.pie.SimplePie;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
+import me.phoenix.slimelib.registry.CommandRegistry;
+import org.bukkit.NamespacedKey;
 
 import java.util.logging.Logger;
 
 /**
- * Main class of SlimeLib library.
+ * The main SlimeLib class.
  */
-public final class SlimeLib extends JavaPlugin {
+public class SlimeLib extends SlimeAddon{
 
-    // Important
-    private static SlimeLib instance;
+	// Important
+	private static SlimeLib instance;
 
-    // Config
-    private final Config config = new Config(this, "config.yml", -1);
+	// Config
+	private Config config;
 
-    // Service
-    private final MetricsService metrics = new MetricsService(this, 21985);
+	// Registry
+	private final CommandRegistry commandRegistry = new CommandRegistry();
 
-    // Registry
-    private final CommandRegistry commandRegistry = new CommandRegistry();
+	@Override
+	public void onPluginLoad(){
+		instance = (SlimeLib) SlimeAddon.instance();
+	}
 
-    /**
-     * Instance of SlimeLib.
-     */
-    public SlimeLib(){ instance = this;}
+	@Override
+	public void onPluginEnable(){
+		printLogo();
+	}
 
-    /**
-     * Instance of SlimeLib.
-     *
-     * @return the SlimeLib instance
-     */
-    public static SlimeLib instance(){ return instance;}
+	@Override
+	public void onPluginDisable(){
+		printLogo();
+	}
 
-    /**
-     * Instance of SlimeLib's Config.
-     *
-     * @return the SlimeLib Config
-     */
-    public static Config config(){ return instance.config;}
+	@Override
+	public void setupConfigs(){
+		config = new Config(getInstance(), "config.yml");
+	}
 
-    /**
-     * Instance of CommandRegistry.
-     *
-     * @return the CommandRegistry instance
-     */
-    public static CommandRegistry commandRegistry(){ return instance.commandRegistry;}
+	@Override
+	public void setupMetrics(){
+		final MetricsService metrics = new MetricsService(getInstance(), 21985);
+		metrics.addCustomChart(
+				new SimplePie("auto_update",
+						() -> config.getBoolean("options.auto-update") ? "Enabled" : "Disabled"
+				)
+		);
+	}
 
-    /**
-     * SlimeLib's logger.
-     *
-     * @return the Logger
-     */
-    public static Logger logger(){ return instance.getLogger();}
-    
-    @Override
-    public void onEnable() {
-        sendStartupMessage();
-        setupMetrics();
-        setupEvents();
-    }
+	@Override
+	public void setupEvents(){
+		new MenuListener(getInstance());
+		new ReloadCommand(getInstance());
+	}
 
-    @Override
-    public void onDisable() {
-        cancelAllTasks();
-        sendGoodByeMessage();
-    }
+	/**
+	 * Get the instance of SlimeLib.
+	 *
+	 * @return the SlimeLib instance
+	 */
+	public static SlimeLib getInstance(){
+		return instance;
+	}
 
-    private void printLogo(){
-        logger().info("███████╗██╗     ██╗███╗   ███╗███████╗██╗     ██╗██████╗");
-        logger().info("██╔════╝██║     ██║████╗ ████║██╔════╝██║     ██║██╔══██╗");
-        logger().info("███████╗██║     ██║██╔████╔██║█████╗  ██║     ██║██████╔╝");
-        logger().info("╚════██║██║     ██║██║╚██╔╝██║██╔══╝  ██║     ██║██╔══██╗");
-        logger().info("███████║███████╗██║██║ ╚═╝ ██║███████╗███████╗██║██████╔╝");
-        logger().info("╚══════╝╚══════╝╚═╝╚═╝     ╚═╝╚══════╝╚══════╝╚═╝╚═════╝");
-    }
+	/**
+	 * Create a namespaced key.
+	 *
+	 * @param key the key
+	 *
+	 * @return the namespaced key
+	 */
+	public static NamespacedKey key(String key){ return new NamespacedKey(instance, key); }
 
-    private void sendStartupMessage(){ printLogo(); }
+	/**
+	 * Get the main config.
+	 *
+	 * @return the config
+	 */
+	public static Config config(){
+		return instance.config;
+	}
 
-    private void setupMetrics(){
-        metrics.addCustomChart(
-                new SimplePie("auto_update",
-                        () -> config.getBoolean("options.auto-update") ? "Enabled" : "Disabled"
-                )
-        );
-    }
+	/**
+	 * Get he logger logger.
+	 *
+	 * @return the logger
+	 */
+	public static Logger logger(){
+		return instance.getLogger();
+	}
 
-    private void setupEvents(){
-        new MenuListener(this);
-    }
+	/**
+	 * Get the command registry.
+	 *
+	 * @return the command registry
+	 */
+	public static CommandRegistry commandRegistry(){
+		return instance.commandRegistry;
+	}
 
-    private void cancelAllTasks(){
-        Bukkit.getScheduler().cancelTasks(instance);
-    }
-
-    private void sendGoodByeMessage(){ printLogo(); }
+	private void printLogo(){
+		logger().info("███████╗██╗     ██╗███╗   ███╗███████╗██╗     ██╗██████╗");
+		logger().info("██╔════╝██║     ██║████╗ ████║██╔════╝██║     ██║██╔══██╗");
+		logger().info("███████╗██║     ██║██╔████╔██║█████╗  ██║     ██║██████╔╝");
+		logger().info("╚════██║██║     ██║██║╚██╔╝██║██╔══╝  ██║     ██║██╔══██╗");
+		logger().info("███████║███████╗██║██║ ╚═╝ ██║███████╗███████╗██║██████╔╝");
+		logger().info("╚══════╝╚══════╝╚═╝╚═╝     ╚═╝╚══════╝╚══════╝╚═╝╚═════╝");
+	}
 }

@@ -34,7 +34,7 @@ public class Styles{
 	/**
 	 * Style for error messages.
 	 */
-    public static final Styles ERROR = new Styles(NamedTextColor.RED, "Error");
+	public static final Styles ERROR = new Styles(NamedTextColor.RED, "Error");
 	/**
 	 * Style for warning messages.
 	 */
@@ -54,7 +54,7 @@ public class Styles{
 	/**
 	 * Style for machine items.
 	 */
-    public static final Styles MACHINE = new Styles(TextColor.color(255, 255, 0), "Electric Machine");
+	public static final Styles MACHINE = new Styles(TextColor.color(255, 255, 0), "Electric Machine");
 	/**
 	 * Style for generator items.
 	 */
@@ -129,7 +129,7 @@ public class Styles{
     }
 
 	/**
-	 *Apply style to an object as a string.
+	 * Apply style to an object as a string.
 	 *
 	 * @param value the value
 	 *

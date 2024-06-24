@@ -7,4 +7,8 @@ description: A Minecraft Development Library for SlimeCraftSMP plugins.
 
 main: me.phoenix.slimelib.SlimeLib
 api-version: 1.20
-depend: [Slimefun]
+softdepend: [Slimefun]
+
+commands:
+  configReload:
+    description: Reloads a specific config. Can be used to reload configs from other addons.

@@ -7,6 +7,13 @@ import java.lang.reflect.Method;
 
 /**
  * The Command object for easy storage.
+ *
+ * @param command the main command
+ * @param arguments the command arguments
+ * @param permission the command permission
+ * @param syntax the command syntax
+ * @param method the method
+ * @param plugin the plugin
  */
 public record CommandInfo(
 		String command,
