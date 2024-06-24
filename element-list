@@ -3,6 +3,7 @@ me.phoenix.slimelib.command
 me.phoenix.slimelib.command.annotation
 me.phoenix.slimelib.command.object
 me.phoenix.slimelib.config
+me.phoenix.slimelib.core
 me.phoenix.slimelib.inventory
 me.phoenix.slimelib.inventory.handler
 me.phoenix.slimelib.item
