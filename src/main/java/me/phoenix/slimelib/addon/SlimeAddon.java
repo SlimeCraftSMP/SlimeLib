@@ -1,6 +1,7 @@
-package me.phoenix.slimelib;
+package me.phoenix.slimelib.addon;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -63,6 +64,11 @@ public abstract class SlimeAddon extends JavaPlugin{
 	 * Sets events.
 	 */
 	public abstract void setupEvents();
+
+	/**
+	 * Executes actions on reload.
+	 */
+	public abstract void onReload(CommandSender sender);
 
 	// Static Getters
 

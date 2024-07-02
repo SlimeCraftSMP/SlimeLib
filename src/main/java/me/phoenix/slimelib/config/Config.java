@@ -1,5 +1,6 @@
 package me.phoenix.slimelib.config;
 
+import me.phoenix.slimelib.SlimeLib;
 import me.phoenix.slimelib.other.SchedulerUtils;
 import me.phoenix.slimelib.other.TypeUtils;
 import org.bukkit.Material;
@@ -9,6 +10,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,18 +24,22 @@ import java.util.Map;
  */
 public class Config extends YamlConfiguration{
 
-	private YamlConfiguration config;
-	private final File file;
 	private final JavaPlugin plugin;
+	private final File file;
+	private YamlConfiguration config;
 
-	private Config(JavaPlugin plugin, String path, File file){
+	private Config(JavaPlugin plugin, String path, File file, boolean reloadAble){
 		this.plugin = plugin;
+
 		this.file = file;
 		plugin.saveResource(path, false);
 		load();
 		save();
+
 		this.config = YamlConfiguration.loadConfiguration(file);
 		this.config.options().copyDefaults(true);
+
+		if (reloadAble) SlimeLib.configRegistry().config(plugin.getName(), this);
 	}
 
 	/**
@@ -40,23 +47,25 @@ public class Config extends YamlConfiguration{
 	 *
 	 * @param plugin the plugin
 	 * @param path the path
-	 * @param savePeriod the save period, if you wish to disable auto saving use {@link Config(JavaPlugin, String)}
+	 * @param savePeriod the save period, if you wish to disable auto saving set it as -1
+	 * @param reloadAble if the config should be reloadable or not, if you wish to disable this set it as false
 	 */
-	public Config(JavaPlugin plugin, String path, int savePeriod){
-		this(plugin, path, new File(plugin.getDataFolder(), path));
+	public Config(JavaPlugin plugin, String path, int savePeriod, boolean reloadAble){
+		this(plugin, path, new File(plugin.getDataFolder(), path), reloadAble);
+
 		if(savePeriod != -1){
 			SchedulerUtils.repeatTask(plugin, this::save, savePeriod);
 		}
 	}
 
 	/**
-	 * Creates a new Config without auto-save.
+	 * Creates a new Config without auto-save and reloadable by default.
 	 *
 	 * @param plugin the plugin
 	 * @param path the path
 	 */
 	public Config(JavaPlugin plugin, String path){
-		this(plugin, path, -1);
+		this(plugin, path, -1, true);
 	}
 
 	/**
@@ -113,6 +122,12 @@ public class Config extends YamlConfiguration{
 		return entities;
 	}
 
+	@Override
+	public void set(@Nonnull final String path, @Nullable final Object value){
+		super.set(path, value);
+		save();
+	}
+
 	/**
 	 * Sets the default value at a path.
 	 *
@@ -121,7 +136,8 @@ public class Config extends YamlConfiguration{
 	 */
 	public void defaultValue(String path, Object value){
 		if(!contains(path)){
-			set(path, value);
+			this.set(path, value);
+			save();
 		}
 	}
 
@@ -163,6 +179,17 @@ public class Config extends YamlConfiguration{
 	 */
 	public JavaPlugin plugin(){
 		return plugin;
+	}
+
+	/**
+	 * Returns the name of the config
+	 *
+	 * @return the name
+	 */
+	public String name(){
+		final String fileName = file.getName();
+		final int dotIndex = fileName.lastIndexOf('.');
+		return dotIndex == -1 ? fileName : fileName.substring(0, dotIndex);
 	}
 
 	/**

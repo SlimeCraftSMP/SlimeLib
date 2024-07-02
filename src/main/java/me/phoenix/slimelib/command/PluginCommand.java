@@ -34,8 +34,9 @@ public class PluginCommand {
 	}
 
 	private void registerCommand(Method method, JavaPlugin plugin, CommandAction action){
-		SlimeLib.commandRegistry().command(new CommandInfo(
-				action.command(), registerArray(action.argument()), registerString(action.permission()), registerString(action.syntax()), method, plugin
+		SlimeLib.commandRegistry().command(action.command(), new CommandInfo(
+				registerArray(action.argument()), registerString(action.description()),
+				registerString(action.permission()), registerString(action.syntax()), method, plugin
 		));
 		plugin.getCommand(action.command()).setExecutor(new CommandLogic());
 	}

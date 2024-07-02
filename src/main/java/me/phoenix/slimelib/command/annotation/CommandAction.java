@@ -19,6 +19,13 @@ public @interface CommandAction{
 	String command();
 
 	/**
+	 * The command description, e.g. "This command reloads your config"
+	 *
+	 * @return the description
+	 */
+	String description() default "null";
+
+	/**
 	 * The command argument, e.g. "%player%" or "%file%"
 	 *
 	 * @return the argument

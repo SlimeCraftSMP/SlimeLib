@@ -11,4 +11,12 @@ softdepend: [Slimefun]
 
 commands:
   configReload:
-    description: Reloads a specific config. Can be used to reload configs from other addons.
+    description: "Reloads a specific config. Can be used to reload configs from other addons."
+    usage: "%plugin% - The plugin whose config you want to reload. %file% - The config file you want to reload."
+
+  pluginReload:
+    description: "Reloads SlimeLib. Can be used to reload other addons."
+    usage: "%plugin% - The plugin whom you want to reload."
+
+  serverVersion:
+    description: "Retrieves necessary information about the server for debugging purpose by developers."

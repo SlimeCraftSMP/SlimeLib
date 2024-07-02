@@ -74,6 +74,10 @@
                     <!-- Group packages together in the Javadocs -->
                     <groups>
                         <group>
+                            <title>SlimeLib - Addon System</title>
+                            <packages>me.phoenix.slimelib.addon*</packages>
+                        </group>
+                        <group>
                             <title>SlimeLib - Command Management</title>
                             <packages>me.phoenix.slimelib.command*</packages>
                         </group>
