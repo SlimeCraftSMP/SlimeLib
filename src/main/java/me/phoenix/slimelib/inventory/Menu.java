@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +56,7 @@ public class Menu implements InventoryHolder{
 		return this.playerInteractable;
 	}
 
-	private void item(int slot, ItemStack item){
+	private void setItem(int slot, ItemStack item){
 		if(slot > this.inventory.getSize() || slot < 0){
 			throw new IllegalArgumentException("Invalid Slot: " + slot);
 		} else{
@@ -72,9 +71,19 @@ public class Menu implements InventoryHolder{
 	 * @param item the item
 	 * @param clickHandler the click handler
 	 */
-	public void item(int slot, ItemStack item, @Nullable MenuClickHandler clickHandler){
-		item(slot, item);
+	public void item(int slot, ItemStack item, MenuClickHandler clickHandler){
+		setItem(slot, item);
 		menuClickHandler(slot, clickHandler);
+	}
+
+	/**
+	 * Put an item in the menu with an empty click handler.
+	 *
+	 * @param slot the slot
+	 * @param item the item
+	 */
+	public void item(int slot, ItemStack item){
+		item(slot, item, MenuUtils.emptyClickHandler());
 	}
 
 	/**

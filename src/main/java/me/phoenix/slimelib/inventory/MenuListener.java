@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -52,6 +53,21 @@ public class MenuListener implements Listener{
 	}
 
 	/**
+	 * Executes on drag.
+	 *
+	 * @param event the event
+	 */
+	@EventHandler
+	public void onDrag(InventoryDragEvent event){
+		final Player player = (Player) event.getWhoClicked();
+		final Menu menu = menus.get(player.getUniqueId());
+		if(menu == null){
+			return;
+		}
+		event.setCancelled(!menu.playerInteractable());
+	}
+
+	/**
 	 * Executes on close.
 	 *
 	 * @param event the event
@@ -60,7 +76,10 @@ public class MenuListener implements Listener{
 	public void onClose(InventoryCloseEvent event){
 		final Player player = (Player) event.getPlayer();
 		final Menu menu = menus.remove(player.getUniqueId());
-		if(menu != null){
+		if(menu == null){
+			return;
+		}
+		if(menu.menuCloseHandler() != null){
 			menu.menuCloseHandler().onClose(player, menu, event.getReason());
 		}
 	}

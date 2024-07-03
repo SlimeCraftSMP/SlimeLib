@@ -52,7 +52,7 @@ public class VersionCommand extends PluginCommand{
 
 	private static void serverInfo(TextComponent.Builder component){
 		ComponentUtils.nextLine(component, Component.text("Server Info").decorate(TextDecoration.BOLD, TextDecoration.UNDERLINED));
-		ComponentUtils.nextLine(component, Versions.serverVersion());
+		ComponentUtils.nextLine(component, Versions.serverSoftware() + " " + Versions.serverVersion());
 		ComponentUtils.nextLine(component, "Java " + Runtime.version().feature());
 		ComponentUtils.nextLine(component, Component.text("Installed Addons: (" + SlimeLib.addonRegistry().size() + ")").decorate(TextDecoration.BOLD, TextDecoration.UNDERLINED));
 	}

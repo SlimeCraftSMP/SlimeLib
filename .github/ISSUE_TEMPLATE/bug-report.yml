@@ -102,7 +102,7 @@ body:
     label: '⭐ SlimeLib version'
     description: |
       We reserve the right to close your issue if you fail to provide exact version numbers. **"latest" is not a version number.**
-      You can also execute "/sf versions" and upload a complete screenshot of the entire output.
+      You can also execute "/serverVersion" and upload a complete screenshot of the entire output.
     placeholder: SlimeLib version [...]
 
 - type: markdown
