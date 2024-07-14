@@ -3,7 +3,7 @@ package me.phoenix.slimelib.slimefun.block.container;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.phoenix.slimelib.SlimeLib;
 import me.phoenix.slimelib.item.CustomItem;
 import me.phoenix.slimelib.visual.Styles;
 import net.kyori.adventure.text.Component;
@@ -34,15 +34,21 @@ public enum UIComponent {
 	/**
 	 * Input border item.
 	 */
-	INPUT_BORDER(ChestMenuUtils.getInputSlotTexture()),
+	INPUT_BORDER(new CustomItem(Material.CYAN_STAINED_GLASS_PANE,
+			(meta) -> meta.setCustomModelData(SlimeLib.config().getInt("item-model.border")))
+	),
 	/**
 	 * Output border item.
 	 */
-	OUTPUT_BORDER(ChestMenuUtils.getOutputSlotTexture()),
+	OUTPUT_BORDER(new CustomItem(Material.ORANGE_STAINED_GLASS_PANE,
+			(meta) -> meta.setCustomModelData(SlimeLib.config().getInt("item-model.input-border")))
+	),
 	/**
 	 * Border item.
 	 */
-	BORDER(ChestMenuUtils.getBackground());
+	BORDER(new CustomItem(Material.GRAY_STAINED_GLASS_PANE,
+			(meta) -> meta.setCustomModelData(SlimeLib.config().getInt("item-model.output-border")))
+	);
 
     private final ItemStack item;
 

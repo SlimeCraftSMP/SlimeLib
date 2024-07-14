@@ -1,2 +1,6 @@
 options:
   auto-update: true
+item-model:
+  border: 2200002
+  input-border: 2200530
+  output-border: 2200531
