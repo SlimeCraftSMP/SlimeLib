@@ -60,7 +60,7 @@ jobs:
           mv Slimefun4-SlimeCraftSMP.jar plugins/Slimefun4-SlimeCraftSMP.jar
 
       - name: Download SlimeLib
-        uses: actions/download-artifact@v4.1.4
+        uses: actions/download-artifact@v4.1.7
         with:
           name: ${{ inputs.artifact-name }}
           path: plugins/
